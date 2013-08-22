@@ -58,8 +58,15 @@ add_config 'ln -s /dev/null /etc/udev/rules.d/80-net-name-slot.rules'
 add_config "/usr/bin/ln -s '/usr/lib/systemd/system/dhcpcd@.service' '/etc/systemd/system/multi-user.target.wants/dhcpcd@eth0.service'"
 add_config "/usr/bin/sed -i 's/#UseDNS yes/UseDNS no/' /etc/ssh/sshd_config"
 add_config '/usr/bin/systemctl enable sshd.service'
-add_config '/usr/bin/pacman -Rcns --noconfirm gptfdisk'
-add_config '/usr/bin/pacman -Scc --noconfirm'
+
+# VMware Tools
+add_config '/usr/bin/pacman -S --noconfirm linux-headers open-vm-tools open-vm-tools-dkms'
+add_config '/usr/bin/dkms add open-vm-tools/2013.04.16'
+add_config '/usr/bin/dkms install -m open-vm-tools -v 2013.04.16 -k $(uname -r)'
+add_config '/usr/bin/systemctl enable vmtoolsd'
+add_config 'cat /proc/version > /etc/arch-release'
+# https://bbs.archlinux.org/viewtopic.php?pid=1206006#p1206006
+add_config "/usr/bin/sed -i 's/vmtoolsd/vmtoolsd\nTimeoutStopSec=2/' /usr/lib/systemd/system/vmtoolsd.service"
 
 # Vagrant-specific configuration
 add_config "/usr/bin/useradd --password ${PASSWORD} --comment \"Vagrant User\" --create-home --gid users vagrant"
@@ -69,6 +76,10 @@ add_config '/usr/bin/install --directory --owner=vagrant --group=users --mode=07
 add_config '/usr/bin/curl --output /home/vagrant/.ssh/authorized_keys https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub'
 add_config '/usr/bin/chown vagrant:users /home/vagrant/.ssh/authorized_keys'
 add_config '/usr/bin/chmod 0600 /home/vagrant/.ssh/authorized_keys'
+
+# clean up
+add_config '/usr/bin/pacman -Rcns --noconfirm gptfdisk'
+add_config '/usr/bin/pacman -Scc --noconfirm'
 
 echo '==> entering chroot and configuring system'
 /usr/bin/arch-chroot ${TARGET_DIR} ${CONFIG_SCRIPT}
