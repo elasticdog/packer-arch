@@ -11,6 +11,7 @@
                 "/usr/bin/curl -O https://raw.github.com/elasticdog/packer-arch/master/install.sh<enter><wait5>",
                 "/usr/bin/bash ./install.sh<enter>"
             ],
+            "disk_size": "20480",
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "shutdown_command": "systemctl poweroff"

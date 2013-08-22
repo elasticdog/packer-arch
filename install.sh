@@ -36,6 +36,7 @@ echo '==> bootstrapping the base installation'
 /usr/bin/arch-chroot ${TARGET_DIR} pacman -S --noconfirm gptfdisk openssh syslinux
 /usr/bin/arch-chroot ${TARGET_DIR} syslinux-install_update -i -a -m
 /usr/bin/sed -i 's/sda3/sda1/' "${TARGET_DIR}/boot/syslinux/syslinux.cfg"
+/usr/bin/sed -i 's/TIMEOUT 50/TIMEOUT 10/' "${TARGET_DIR}/boot/syslinux/syslinux.cfg"
 
 echo '==> generating the filesystem table'
 /usr/bin/genfstab -p ${TARGET_DIR} >> "${TARGET_DIR}/etc/fstab"
@@ -47,17 +48,18 @@ add_config() {
   echo "${1}" >> "${TARGET_DIR}${CONFIG_SCRIPT}"
 }
 
-add_config "echo \"${FQDN}\" > /etc/hostname"
+add_config "echo '${FQDN}' > /etc/hostname"
 add_config "/usr/bin/ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime"
-add_config "echo "KEYMAP=${KEYMAP}" > /etc/vconsole.conf"
-add_config "/usr/bin/sed -i \"s/#${LANGUAGE}/${LANGUAGE}/\" /etc/locale.gen"
+add_config "echo 'KEYMAP=${KEYMAP}' > /etc/vconsole.conf"
+add_config "/usr/bin/sed -i 's/#${LANGUAGE}/${LANGUAGE}/' /etc/locale.gen"
 add_config '/usr/bin/locale-gen'
 add_config '/usr/bin/mkinitcpio -p linux'
 add_config "/usr/bin/usermod --password ${PASSWORD} root"
 add_config "/usr/bin/useradd --password ${PASSWORD} --comment \"Vagrant User\" --create-home --gid users vagrant"
 add_config "echo 'vagrant ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/10_vagrant"
 add_config '/usr/bin/systemctl enable sshd.service'
-add_config "/usr/bin/systemctl enable dhcpcd@${NIC_DEVICE}"
+add_config "/usr/bin/ln -s '/usr/lib/systemd/system/dhcpcd@.service' '/etc/systemd/system/multi-user.target.wants/dhcpcd@${NIC_DEVICE}.service'"
+add_config '/usr/bin/pacman -Rcns --noconfirm gptfdisk'
 add_config '/usr/bin/pacman -Scc --noconfirm'
 
 echo '==> entering chroot and configuring system'
