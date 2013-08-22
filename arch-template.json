@@ -16,5 +16,8 @@
             "ssh_password": "vagrant",
             "shutdown_command": "systemctl poweroff"
         }
+    ],
+    "post-processors": [
+        "vagrant"
     ]
 }
