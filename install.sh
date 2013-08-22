@@ -65,5 +65,5 @@ add_config '/usr/bin/pacman -Scc --noconfirm'
 echo '==> entering chroot and configuring system'
 /usr/bin/arch-chroot ${TARGET_DIR} ${CONFIG_SCRIPT}
 rm "${TARGET_DIR}${CONFIG_SCRIPT}"
-#/usr/bin/umount ${TARGET_DIR}
-#/usr/bin/systemctl reboot
+/usr/bin/umount ${TARGET_DIR}
+/usr/bin/systemctl reboot

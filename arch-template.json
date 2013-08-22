@@ -12,7 +12,7 @@
                 "/usr/bin/bash ./install.sh<enter>"
             ],
             "disk_size": 20480,
-            "ssh_username": "vagrant",
+            "ssh_username": "root",
             "ssh_password": "vagrant",
             "shutdown_command": "systemctl poweroff"
         }
