@@ -8,12 +8,11 @@
             "boot_wait": "5s",
             "boot_command": [
                 "<enter><wait10><wait10>",
-                "/usr/bin/curl -O https://raw.github.com/elasticdog/packer-arch/master/install.sh<enter><wait10>",
+                "/usr/bin/curl -O https://raw.github.com/elasticdog/packer-arch/master/install.sh<enter><wait5>",
                 "/usr/bin/bash ./install.sh<enter>"
             ],
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
-            "ssh_wait_timeout": "10m",
             "shutdown_command": "systemctl poweroff"
         }
     ]
