@@ -4,7 +4,6 @@ DISK='/dev/sda'
 FQDN='vagrant-arch.vagrantup.com'
 KEYMAP='us'
 LANGUAGE='en_US.UTF-8'
-NIC_DEVICE='ens33'
 PASSWORD=$(/usr/bin/openssl passwd -crypt 'vagrant')
 TIMEZONE='UTC'
 
@@ -55,13 +54,14 @@ add_config "/usr/bin/sed -i 's/#${LANGUAGE}/${LANGUAGE}/' /etc/locale.gen"
 add_config '/usr/bin/locale-gen'
 add_config '/usr/bin/mkinitcpio -p linux'
 add_config "/usr/bin/usermod --password ${PASSWORD} root"
+add_config 'ln -s /dev/null /etc/udev/rules.d/80-net-name-slot.rules'
+add_config "/usr/bin/ln -s '/usr/lib/systemd/system/dhcpcd@.service' '/etc/systemd/system/multi-user.target.wants/dhcpcd@eth0.service'"
+add_config "/usr/bin/sed -i 's/#UseDNS yes/UseDNS no/' /etc/ssh/sshd_config"
 add_config '/usr/bin/systemctl enable sshd.service'
-add_config "/usr/bin/ln -s '/usr/lib/systemd/system/dhcpcd@.service' '/etc/systemd/system/multi-user.target.wants/dhcpcd@${NIC_DEVICE}.service'"
 add_config '/usr/bin/pacman -Rcns --noconfirm gptfdisk'
 add_config '/usr/bin/pacman -Scc --noconfirm'
 
 # Vagrant-specific configuration
-add_config "/usr/bin/sed -i 's/#UseDNS yes/UseDNS no/' /etc/ssh/sshd_config"
 add_config "/usr/bin/useradd --password ${PASSWORD} --comment \"Vagrant User\" --create-home --gid users vagrant"
 add_config "echo 'Defaults env_keep += \"SSH_AUTH_SOCK\"' > /etc/sudoers.d/10_vagrant"
 add_config "echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers.d/10_vagrant"
