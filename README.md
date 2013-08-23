@@ -62,6 +62,11 @@ following error message:
 > to properly install. Carefully read the output of the VMware tools
 > installation to verify the HGFS kernel modules were installed properly.
 
+The box also does not have Puppet or Chef installed for automatic
+provisioning. My intention was to duplicate a DigitalOcean VPS and
+furthermore use the VM for testing [Ansible](http://www.ansibleworks.com/)
+playbooks for configuration management.
+
 License
 -------
 
