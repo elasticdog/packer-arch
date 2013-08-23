@@ -16,7 +16,7 @@ My goal was to roughly duplicate the attributes from a
 * 64-bit
 * 20 GB disk
 * 512 MB memory
-* Only a single /root partition
+* Only a single /root partition (ext4)
 * No swap
 * Includes the `base` and `base-devel` package groups
 * OpenSSH is also installed and enabled on boot
