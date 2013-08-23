@@ -30,7 +30,7 @@ and the steps recommended for any base box.
 Usage
 -----
 
-Assuming that you already have Packer, Vmware Fusion (or VMware Workstation),
+Assuming that you already have Packer, VMware Fusion (or VMware Workstation),
 and Vagrant with the VMware provider installed, you should be good to clone
 this repo and go:
 
@@ -48,12 +48,12 @@ Known Issues
 The official VMware Tools do not currently support Arch Linux, and the
 [Open Virtual Machine Tools](http://open-vm-tools.sourceforge.net/)
 (open-vm-tools) require extensive patching in order to compile correctly
-with a Linux 3.10 series kernel. Thus, for the time being, I have not
-included support for the tools, which means that the shared folder feature
-will not work.
+with a Linux 3.10 series kernel. So for the time being, I have not
+included support for the tools.
 
-When you run `vagrant up` to launch a VM based on this box, you will see the
-following error message (which is safe to ignore):
+No tools means that the shared folder feature will not work, and when you
+run `vagrant up` to launch a VM based on this box, you will see the
+following error message:
 
 > The HGFS kernel module was not found on the running virtual machine.
 > This must be installed for shared folders to work properly. Please
