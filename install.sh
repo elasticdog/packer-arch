@@ -55,7 +55,7 @@ add_config '/usr/bin/locale-gen'
 add_config '/usr/bin/mkinitcpio -p linux'
 add_config "/usr/bin/usermod --password ${PASSWORD} root"
 # https://wiki.archlinux.org/index.php/Network_Configuration#Device_names
-add_config 'ln -s /dev/null /etc/udev/rules.d/80-net-name-slot.rules'
+add_config '/usr/bin/ln -s /dev/null /etc/udev/rules.d/80-net-name-slot.rules'
 add_config "/usr/bin/ln -s '/usr/lib/systemd/system/dhcpcd@.service' '/etc/systemd/system/multi-user.target.wants/dhcpcd@eth0.service'"
 add_config "/usr/bin/sed -i 's/#UseDNS yes/UseDNS no/' /etc/ssh/sshd_config"
 add_config '/usr/bin/systemctl enable sshd.service'
