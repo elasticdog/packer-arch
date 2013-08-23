@@ -14,8 +14,8 @@ My goal was to roughly duplicate the attributes from a
 [DigitalOcean](https://www.digitalocean.com/) Arch Linux droplet:
 
 * 64-bit
-* 20 GB Disk
-* 512 MB Memory
+* 20 GB disk
+* 512 MB memory
 * Only a single /root partition
 * No swap
 * Includes the `base` and `base-devel` package groups
