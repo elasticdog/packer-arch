@@ -44,12 +44,6 @@ echo '==> generating the system configuration script'
 /usr/bin/install --mode=0755 /dev/null "${TARGET_DIR}${CONFIG_SCRIPT}"
 
 cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
-	# VirtualBox Guest Additions
-	/usr/bin/pacman -S --noconfirm linux-headers virtualbox-guest-utils virtualbox-guest-dkms
-	echo -e 'vboxguest\nvboxsf\nvboxvideo' > /etc/modules-load.d/virtualbox.conf
-	/usr/bin/systemctl start dkms.service
-	/usr/bin/systemctl enable dkms.service
-
 	echo '${FQDN}' > /etc/hostname
 	/usr/bin/ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
 	echo 'KEYMAP=${KEYMAP}' > /etc/vconsole.conf
@@ -62,6 +56,15 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
 	/usr/bin/ln -s '/usr/lib/systemd/system/dhcpcd@.service' '/etc/systemd/system/multi-user.target.wants/dhcpcd@eth0.service'
 	/usr/bin/sed -i 's/#UseDNS yes/UseDNS no/' /etc/ssh/sshd_config
 	/usr/bin/systemctl enable sshd.service
+
+	# VirtualBox Guest Additions
+	/usr/bin/pacman -S --noconfirm linux-headers virtualbox-guest-utils virtualbox-guest-dkms
+	echo -e 'vboxguest\nvboxsf\nvboxvideo' > /etc/modules-load.d/virtualbox.conf
+	guest_version=$(/usr/bin/pacman -Q virtualbox-guest-dkms | awk '{ print $2 }' | cut -d'-' -f1)
+	kernel_version="$(/usr/bin/pacman -Q linux | awk '{ print $2 }')-ARCH"
+	/usr/bin/dkms add "vboxguest/${guest_version}"
+	/usr/bin/dkms install "vboxguest/${guest_version}" -k "${kernel_version}/x86_64"
+	/usr/bin/systemctl enable dkms.service
 
 	# Vagrant-specific configuration
 	/usr/bin/groupadd vagrant
