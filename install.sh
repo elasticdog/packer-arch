@@ -66,6 +66,8 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
 	/usr/bin/curl --output /home/vagrant/.ssh/authorized_keys https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub
 	/usr/bin/chown vagrant:users /home/vagrant/.ssh/authorized_keys
 	/usr/bin/chmod 0600 /home/vagrant/.ssh/authorized_keys
+	# workaround for shutdown race condition: http://comments.gmane.org/gmane.linux.arch.general/48739
+	/usr/bin/curl --output /etc/systemd/system/poweroff.timer https://raw.github.com/elasticdog/packer-arch/master/poweroff.timer
 
 	# clean up
 	/usr/bin/pacman -Rcns --noconfirm gptfdisk
