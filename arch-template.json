@@ -18,6 +18,9 @@
         }
     ],
     "post-processors": [
-        "vagrant"
+        {
+            "type": "vagrant",
+            "output": "packer_arch_{{.Provider}}.box"
+        }
     ]
 }

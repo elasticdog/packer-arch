@@ -40,7 +40,7 @@ this repo and go:
 
 Then you can import the generated box into Vagrant:
 
-    $ vagrant box add arch packer_vmware_vmware.box
+    $ vagrant box add arch packer_arch_vmware.box
 
 Known Issues
 ------------
