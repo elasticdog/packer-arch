@@ -60,6 +60,7 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
 	# VirtualBox Guest Additions
 	/usr/bin/pacman -S --noconfirm linux-headers virtualbox-guest-utils virtualbox-guest-dkms
 	echo -e 'vboxguest\nvboxsf\nvboxvideo' > /etc/modules-load.d/virtualbox.conf
+	/usr/bin/systemctl start dkms.service
 	/usr/bin/systemctl enable dkms.service
 
 	# Vagrant-specific configuration
