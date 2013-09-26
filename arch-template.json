@@ -7,7 +7,7 @@
             "iso_checksum_type": "sha1",
             "boot_wait": "5s",
             "boot_command": [
-                "<enter><wait10><wait5>",
+                "<enter><wait10><wait10>",
                 "/usr/bin/curl -O https://raw.github.com/elasticdog/packer-arch/master/install.sh<enter><wait5>",
                 "/usr/bin/bash ./install.sh<enter>"
             ],
