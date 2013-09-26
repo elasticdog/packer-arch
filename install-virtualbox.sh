@@ -65,10 +65,11 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
 	/usr/bin/dkms add "vboxguest/\${guest_version}"
 	/usr/bin/dkms install "vboxguest/\${guest_version}" -k "\${kernel_version}/x86_64"
 	/usr/bin/systemctl enable dkms.service
+	/usr/bin/systemctl enable vboxservice.service
 
 	# Vagrant-specific configuration
 	/usr/bin/groupadd vagrant
-	/usr/bin/useradd --password ${PASSWORD} --comment 'Vagrant User' --create-home --gid users --groups vagrant vagrant
+	/usr/bin/useradd --password ${PASSWORD} --comment 'Vagrant User' --create-home --gid users --groups vagrant,vboxsf vagrant
 	echo 'Defaults env_keep += "SSH_AUTH_SOCK"' > /etc/sudoers.d/10_vagrant
 	echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers.d/10_vagrant
 	/usr/bin/chmod 0440 /etc/sudoers.d/10_vagrant
