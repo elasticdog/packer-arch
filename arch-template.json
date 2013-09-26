@@ -2,8 +2,8 @@
     "builders": [
         {
             "type": "vmware",
-            "iso_url": "http://mirrors.kernel.org/archlinux/iso/2013.08.01/archlinux-2013.08.01-dual.iso",
-            "iso_checksum": "65aaf2184f19d2bfcd9845688884c03d0f2efc52",
+            "iso_url": "http://mirrors.kernel.org/archlinux/iso/2013.09.01/archlinux-2013.09.01-dual.iso",
+            "iso_checksum": "3b087acd273656c55244baa7b7f1a147be7da990",
             "iso_checksum_type": "sha1",
             "boot_wait": "5s",
             "boot_command": [
