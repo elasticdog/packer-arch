@@ -12,10 +12,11 @@
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
             "guest_os_type": "ArchLinux_64",
             "guest_additions_attach": "true",
+            "http_directory": ".",
             "boot_wait": "5s",
             "boot_command": [
                 "<enter><wait10><wait10>",
-                "/usr/bin/curl -O https://raw.github.com/elasticdog/packer-arch/master/install-virtualbox.sh<enter><wait5>",
+                "/usr/bin/curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/install-virtualbox.sh<enter><wait5>",
                 "/usr/bin/bash ./install-virtualbox.sh<enter>"
             ],
             "disk_size": 20480,
@@ -28,10 +29,11 @@
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "http_directory": ".",
             "boot_wait": "5s",
             "boot_command": [
                 "<enter><wait10><wait10>",
-                "/usr/bin/curl -O https://raw.github.com/elasticdog/packer-arch/master/install-vmware.sh<enter><wait5>",
+                "/usr/bin/curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/install-vmware.sh<enter><wait5>",
                 "/usr/bin/bash ./install-vmware.sh<enter>"
             ],
             "disk_size": 20480,
