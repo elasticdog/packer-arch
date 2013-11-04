@@ -85,13 +85,6 @@ following error message:
 Note that _this issue does not apply to VirtualBox_, as their official
 guest additions work just fine.
 
-### VirtualBox Shared Folders
-
-There is an [upstream issue](https://www.virtualbox.org/changeset/48529/vbox)
-with VirtualBox v4.2.18 where the shared folders will hang when running
-the Linux 3.11 kernel. It has been fixed and will be included with the
-next release.
-
 ### Vagrant Provisioners
 
 The box purposefully does not include Puppet or Chef for automatic Vagrant
