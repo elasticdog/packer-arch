@@ -1,6 +1,6 @@
 {
     "variables": {
-        "iso_url": "http://mirrors.kernel.org/archlinux/iso/2013.09.01/archlinux-2013.09.01-dual.iso",
+        "iso_url": "https://mirrors.kernel.org/archlinux/iso/2013.12.01/archlinux-2013.12.01-dual.iso",
         "iso_checksum": "3b087acd273656c55244baa7b7f1a147be7da990",
         "iso_checksum_type": "sha1"
     },
