@@ -76,8 +76,6 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
 	/usr/bin/curl --output /home/vagrant/.ssh/authorized_keys https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub
 	/usr/bin/chown vagrant:users /home/vagrant/.ssh/authorized_keys
 	/usr/bin/chmod 0600 /home/vagrant/.ssh/authorized_keys
-	# workaround for shutdown race condition: http://comments.gmane.org/gmane.linux.arch.general/48739
-	/usr/bin/curl --output /etc/systemd/system/poweroff.timer https://raw.github.com/elasticdog/packer-arch/master/poweroff.timer
 
 	# clean up
 	/usr/bin/pacman -Rcns --noconfirm gptfdisk
@@ -87,6 +85,10 @@ EOF
 echo '==> entering chroot and configuring system'
 /usr/bin/arch-chroot ${TARGET_DIR} ${CONFIG_SCRIPT}
 rm "${TARGET_DIR}${CONFIG_SCRIPT}"
+
+# http://comments.gmane.org/gmane.linux.arch.general/48739
+echo '==> adding workaround for shutdown race condition'
+/usr/bin/install --mode=0644 poweroff.timer "${TARGET_DIR}/etc/systemd/system/poweroff.timer"
 
 echo '==> installation complete!'
 /usr/bin/sleep 3

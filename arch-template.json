@@ -17,6 +17,7 @@
             "boot_command": [
                 "<enter><wait10><wait10>",
                 "/usr/bin/curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/install-virtualbox.sh<enter><wait5>",
+                "/usr/bin/curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/poweroff.timer<enter><wait5>",
                 "/usr/bin/bash ./install-virtualbox.sh<enter>"
             ],
             "disk_size": 20480,
@@ -34,6 +35,7 @@
             "boot_command": [
                 "<enter><wait10><wait10>",
                 "/usr/bin/curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/install-vmware.sh<enter><wait5>",
+                "/usr/bin/curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/poweroff.timer<enter><wait5>",
                 "/usr/bin/bash ./install-vmware.sh<enter>"
             ],
             "disk_size": 20480,
