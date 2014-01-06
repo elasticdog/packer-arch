@@ -6,7 +6,7 @@
     },
     "builders": [
         {
-            "type": "virtualbox",
+            "type": "virtualbox-iso",
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
@@ -25,7 +25,7 @@
             "shutdown_command": "systemctl start poweroff.timer"
         },
         {
-            "type": "vmware",
+            "type": "vmware-iso",
             "iso_url": "{{user `iso_url`}}",
             "iso_checksum": "{{user `iso_checksum`}}",
             "iso_checksum_type": "{{user `iso_checksum_type`}}",
