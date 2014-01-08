@@ -38,7 +38,7 @@ should be good to clone this repo and go:
 
     $ git clone https://github.com/elasticdog/packer-arch.git
     $ cd packer-arch/
-    $ packer build -only=virtualbox arch-template.json
+    $ packer build -only=virtualbox-iso arch-template.json
 
 Then you can import the generated box into Vagrant:
 
@@ -54,7 +54,7 @@ this repo and go:
 
     $ git clone https://github.com/elasticdog/packer-arch.git
     $ cd packer-arch/
-    $ packer build -only=vmware arch-template.json
+    $ packer build -only=vmware-iso arch-template.json
 
 Then you can import the generated box into Vagrant:
 
