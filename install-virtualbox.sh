@@ -82,6 +82,9 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
 	/usr/bin/pacman -Scc --noconfirm
 EOF
 
+# workaround for shutdown race condition: http://comments.gmane.org/gmane.linux.arch.general/48739
+mv ./poweroff.timer /mnt/etc/systemd/system/poweroff.timer
+
 echo '==> entering chroot and configuring system'
 /usr/bin/arch-chroot ${TARGET_DIR} ${CONFIG_SCRIPT}
 rm "${TARGET_DIR}${CONFIG_SCRIPT}"
