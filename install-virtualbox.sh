@@ -30,6 +30,10 @@ echo '==> creating /root filesystem (ext4)'
 echo "==> mounting ${ROOT_PARTITION} to ${TARGET_DIR}"
 /usr/bin/mount -o noatime,errors=remount-ro ${ROOT_PARTITION} ${TARGET_DIR}
 
+echo '==> selecting mirrors'
+/usr/bin/pacman -Sy --noconfirm reflector
+/usr/bin/reflector -l 50 -p http --sort rate --save /etc/pacman.d/mirrorlist
+
 echo '==> bootstrapping the base installation'
 /usr/bin/pacstrap ${TARGET_DIR} base base-devel
 /usr/bin/arch-chroot ${TARGET_DIR} pacman -S --noconfirm gptfdisk openssh syslinux
