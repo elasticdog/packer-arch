@@ -52,7 +52,7 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
 	/usr/bin/mkinitcpio -p linux
 	/usr/bin/usermod --password ${PASSWORD} root
 	# https://wiki.archlinux.org/index.php/Network_Configuration#Device_names
-	/usr/bin/ln -s /dev/null /etc/udev/rules.d/80-net-name-slot.rules
+	/usr/bin/ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
 	/usr/bin/ln -s '/usr/lib/systemd/system/dhcpcd@.service' '/etc/systemd/system/multi-user.target.wants/dhcpcd@eth0.service'
 	/usr/bin/sed -i 's/#UseDNS yes/UseDNS no/' /etc/ssh/sshd_config
 	/usr/bin/systemctl enable sshd.service
