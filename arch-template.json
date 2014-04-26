@@ -1,7 +1,7 @@
 {
     "variables": {
-        "iso_url": "https://mirrors.kernel.org/archlinux/iso/2014.03.01/archlinux-2014.03.01-dual.iso",
-        "iso_checksum": "bc24540b60a5128d51b6abda462807ce51c77704",
+        "iso_url": "https://mirrors.kernel.org/archlinux/iso/2014.04.01/archlinux-2014.04.01-dual.iso",
+        "iso_checksum": "b7d7d124bc4f82d1df55c17029def67dfa0e5e64",
         "iso_checksum_type": "sha1"
     },
     "builders": [
