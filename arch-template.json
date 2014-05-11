@@ -21,6 +21,7 @@
                 "/usr/bin/bash ./install-virtualbox.sh<enter>"
             ],
             "disk_size": 20480,
+            "hard_drive_interface": "sata",
             "ssh_username": "root",
             "ssh_password": "vagrant",
             "shutdown_command": "systemctl start poweroff.timer"
