@@ -68,6 +68,9 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
 	/usr/bin/chown vagrant:users /home/vagrant/.ssh/authorized_keys
 	/usr/bin/chmod 0600 /home/vagrant/.ssh/authorized_keys
 
+	# Workaround when open-vm-tools-dkms is installed properly to mount modules
+	/usr/bin/mkdir -p /mnt/hgfs
+
 	# clean up
 	/usr/bin/pacman -Rcns --noconfirm gptfdisk
 	/usr/bin/pacman -Scc --noconfirm
