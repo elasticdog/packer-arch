@@ -4,8 +4,8 @@ Packer Arch
 Packer Arch is a bare bones [Packer](http://www.packer.io/) template and
 installation script that can be used to generate a [Vagrant](http://www.vagrantup.com/)
 base box for [Arch Linux](https://www.archlinux.org/). The template works
-with both the default VirtualBox provider as well as the
-[VMware provider](http://www.vagrantup.com/vmware).
+with the default VirtualBox provider as well as with
+[VMware](http://www.vagrantup.com/vmware) and [Parallels](https://github.com/Parallels/vagrant-parallels) providers.
 
 Overview
 --------
@@ -59,6 +59,21 @@ this repo and go:
 Then you can import the generated box into Vagrant:
 
     $ vagrant box add arch packer_arch_vmware.box
+
+### Parallels Provider
+
+Assuming that you already have Packer,
+[Parallels](http://www.parallels.com/), [Parallels SDK](http://www.parallels.com/eu/products/desktop/download/) and
+Vagrant with the Parallels provider installed, you should be good to clone
+this repo and go:
+
+    $ git clone https://github.com/elasticdog/packer-arch.git
+    $ cd packer-arch/
+    $ packer build -only=parallels-iso arch-template.json
+
+Then you can import the generated box into Vagrant:
+
+    $ vagrant box add arch packer_arch_parallels.box
 
 Known Issues
 ------------
