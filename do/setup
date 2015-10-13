@@ -1,0 +1,7 @@
+#!/bin/bash
+# This file configures user specific semi-secret values that shouldn't be part of the template
+# Source this file after changing the values below by calling 'source do/setup' or '. do/setup'
+export ATLAS_TOKEN='mytoken'
+export ATLAS_USERNAME='myusername'
+export ATLAS_NAME='myboxname'
+

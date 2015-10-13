@@ -1,8 +1,12 @@
 {
     "variables": {
-        "iso_url": "https://mirrors.kernel.org/archlinux/iso/2015.06.01/archlinux-2015.06.01-dual.iso",
-        "iso_checksum": "08e27a8d9d20171946f9ab5f2057aa021c3d37d3",
-        "iso_checksum_type": "sha1"
+        "iso_url": "https://mirrors.kernel.org/archlinux/iso/2015.08.01/archlinux-2015.08.01-dual.iso",
+        "iso_checksum": "e98320cd5f0c346fff4140af0b5ffadd59849168",
+        "iso_checksum_type": "sha1",
+        "atlas_token": "{{ env `ATLAS_TOKEN` }}",
+        "atlas_username": "{{env `ATLAS_USERNAME`}}",
+        "atlas_name": "{{env `ATLAS_NAME`}}",
+        "atlas_version": "{{env `ATLAS_VERSION`}}"
     },
     "builders": [
         {
@@ -24,6 +28,7 @@
             "hard_drive_interface": "sata",
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
+            "ssh_timeout": "120m",
             "shutdown_command": "systemctl start poweroff.timer"
         },
         {
@@ -42,13 +47,34 @@
             "disk_size": 20480,
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
+            "ssh_timeout": "120m",
             "shutdown_command": "systemctl start poweroff.timer"
         }
     ],
     "post-processors": [
         {
             "type": "vagrant",
-            "output": "packer_arch_{{.Provider}}.box"
+            "keep_input_artifact": true
+        },
+        {
+            "type": "atlas",
+            "only": ["vmware-iso"],
+            "artifact": "{{user `atlas_username`}}/{{user `atlas_name`}}",
+            "artifact_type": "vagrant.box",
+            "metadata": {
+                "provider": "vmware_desktop",
+                "version": "{{user `atlas_version`}}"
+            }
+        },
+        {
+            "type": "atlas",
+            "only": ["virtualbox-iso"],
+            "artifact": "{{user `atlas_username`}}/{{user `atlas_name`}}",
+            "artifact_type": "vagrant.box",
+            "metadata": {
+                "provider": "virtualbox",
+                "version": "{{user `atlas_version`}}"
+            }
         }
     ]
 }
