@@ -29,7 +29,7 @@
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_timeout": "120m",
-            "shutdown_command": "shutdown -h -t 10"
+            "shutdown_command": "sudo shutdown -h -t 10"
         },
         {
             "type": "vmware-iso",
@@ -48,7 +48,7 @@
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_timeout": "120m",
-            "shutdown_command": "shutdown -h -t 10"
+            "shutdown_command": "sudo shutdown -h -t 10"
         }
     ],
     "post-processors": [
