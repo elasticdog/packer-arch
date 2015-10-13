@@ -1,12 +1,12 @@
 {
     "variables": {
-        "iso_url": "https://mirrors.kernel.org/archlinux/iso/2015.08.01/archlinux-2015.08.01-dual.iso",
-        "iso_checksum": "e98320cd5f0c346fff4140af0b5ffadd59849168",
-        "iso_checksum_type": "sha1",
         "atlas_token": "{{ env `ATLAS_TOKEN` }}",
         "atlas_username": "{{env `ATLAS_USERNAME`}}",
         "atlas_name": "{{env `ATLAS_NAME`}}",
         "atlas_version": "{{env `ATLAS_VERSION`}}"
+        "iso_url": "https://mirrors.kernel.org/archlinux/iso/2015.10.01/archlinux-2015.10.01-dual.iso",
+        "iso_checksum": "6d95a2a35e29b23d6abd30011c6ab8220250efb6",
+        "iso_checksum_type": "sha1"
     },
     "builders": [
         {
@@ -29,7 +29,7 @@
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_timeout": "120m",
-            "shutdown_command": "sudo shutdown -h -t 10"
+            "shutdown_command": "sudo systemctl start poweroff.timer"
         },
         {
             "type": "vmware-iso",
@@ -48,7 +48,29 @@
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_timeout": "120m",
-            "shutdown_command": "sudo shutdown -h -t 10"
+            "shutdown_command": "sudo systemctl start poweroff.timer"
+        },
+        {
+            "type": "parallels-iso",
+            "parallels_tools_flavor": "lin",
+            "parallels_tools_mode": "attach",
+            "guest_os_type": "linux-2.6",
+            "iso_url": "{{user `iso_url`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "http_directory": ".",
+            "boot_wait": "5s",
+            "boot_command": [
+                "<enter><wait10><wait10>",
+                "/usr/bin/curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/install-parallels.sh<enter><wait5>",
+                "/usr/bin/curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/poweroff.timer<enter><wait5>",
+                "/usr/bin/curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/parallels_tools.sh<enter><wait5>",
+                "/usr/bin/bash ./install-parallels.sh<enter>"
+            ],
+            "disk_size": 20480,
+            "ssh_username": "vagrant",
+            "ssh_password": "vagrant",
+            "shutdown_command": "sudo /parallels_tools.sh && sudo rm /parallels_tools.sh && sudo systemctl start poweroff.timer"
         }
     ],
     "post-processors": [
