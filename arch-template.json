@@ -76,7 +76,7 @@
     "post-processors": [
         {
             "type": "vagrant",
-            "keep_input_artifact": true
+            "output": "packer_arch_{{.Provider}}.box",
         },
         {
             "type": "atlas",
