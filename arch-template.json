@@ -22,7 +22,7 @@
             ],
             "disk_size": 20480,
             "hard_drive_interface": "sata",
-            "ssh_username": "root",
+            "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "shutdown_command": "systemctl start poweroff.timer"
         },
@@ -40,7 +40,7 @@
                 "/usr/bin/bash ./install-vmware.sh<enter>"
             ],
             "disk_size": 20480,
-            "ssh_username": "root",
+            "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "shutdown_command": "systemctl start poweroff.timer"
         }
