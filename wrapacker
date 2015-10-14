@@ -1,0 +1,227 @@
+#!/usr/bin/env bash
+
+#
+# wrapacker - https://github.com/elasticdog/packer-arch
+#
+# A script to automatically ensure the latest ISO download URL and optionally
+# use a mirror from the provided country in order to build an Arch Linux box
+# using Packer.
+#
+# Copyright (c) 2015 Aaron Bull Schaefer <aaron@elasticdog.com>
+# This source code is provided under the terms of the ICS License
+# that can be be found in the LICENSE file.
+#
+
+##### Constants
+
+# country codes supported by https://www.archlinux.org/mirrorlist/
+VALID_COUNTRIES=(AT AU BD BE BG BR BY CA CH CL CN CO CZ DE DK EC ES FR GB GR HR HU ID IE IL IN IR IS IT JP KR KZ LT LU LV MK NC NL NO NZ PH PL PT RO RS RU SE SG SK TR TW UA US VN ZA)
+
+
+##### Functions
+
+# print a message to stderr
+warn() {
+	local fmt="$1"
+	shift
+	printf "wrapacker: $fmt\n" "$@" >&2
+}
+
+# print a message to stderr and exit with either
+# the given status or that of the most recent command
+die() {
+	local st="$?"
+	if [[ "$1" != *[^0-9]* ]]; then
+		st="$1"
+		shift
+	fi
+	warn "$@"
+	exit "$st"
+}
+
+# test the VALID_COUNTRIES array for membership of the given value
+validate_country() {
+	local haystack="VALID_COUNTRIES[@]"
+	local needle=$1
+	local found=1
+	for element in "${!haystack}"; do
+		if [[ $element == $needle ]]; then
+			found=0
+			break
+		fi
+	done
+	return $found
+}
+
+# print this script's usage message to stderr
+usage() {
+	cat <<-EOF >&2
+	usage: wrapacker [-c COUNTRY] [-p PROVIDER] [-h]
+	EOF
+}
+
+# print the list of valid countries to stderr
+print_valid_countries() {
+	printf '\n*** VALID COUNTRY CODES ***\n\n' >&2
+	for country in "${VALID_COUNTRIES[@]}"; do
+		printf '%-6s\n' "$country"
+	done | column >&2
+}
+
+# print the list of valid providers to stderr
+print_valid_providers() {
+	printf '\n*** VALID PROVIDERS ***\n\n' >&2
+	for provider in {parallels,virtualbox,vmware}; do
+		printf '%-6s\n' "$provider"
+	done | column >&2
+}
+
+# print this script's help message to stdout
+help() {
+	cat <<-EOF
+
+	NAME
+	     wrapacker -- wrap packer to build arch with custom mirror settings
+
+	SYNOPSIS
+	     wrapacker [options...]
+
+	DESCRIPTION
+
+	     wrapacker will automatically ensure the latest ISO download URL and
+	     will optionally use a mirror from the provided country in order to
+	     build an Arch Linux box using Packer.
+
+	OPTIONS
+	     -c, --country=COUNTRY
+	            the country code to download from;
+	            defaults to the kernel.org US mirror
+
+	     -p, --provider=PROVIDER
+	            the packer provider to build with;
+	            defaults to virtualbox
+
+	     -d, --dry-run
+	            do not actually perform the build, just show what would run
+
+	     -h, --help
+	            view this help message
+
+	AUTHOR
+	     Aaron Bull Schaefer <aaron@elasticdog.com>
+
+	EOF
+}
+
+
+##### Main
+
+# check for dependencies
+for cmd in {awk,curl,sed,tr}; do
+	command -v $cmd > /dev/null || die "required command \"$cmd\" was not found"
+done
+
+# reset all variables that might be set
+country=''
+provider=''
+dry_run=''
+
+# parse command line options
+while [[ $1 != '' ]]; do
+	case $1 in
+		-c | --country)
+			country=$(echo "$2" | tr '[:lower:]' '[:upper:]')
+			shift
+			;;
+		--country=*)
+			country=$(echo "${1#*=}" | tr '[:lower:]' '[:upper:]')
+			;;
+		-p | --provider)
+			provider=$2
+			shift
+			;;
+		--provider=*)
+			provider=${1#*=}
+			;;
+		-d| --dry-run)
+			dry_run=true
+			;;
+		-h | --help | -\?)
+			help
+			print_valid_countries
+			print_valid_providers
+			exit 0
+			;;
+		--*)
+			warn "unknown option -- ${1#--}"
+			usage
+			exit 1
+			;;
+		*)
+			warn "unknown option -- ${1#-}"
+			usage
+			exit 1
+			;;
+	esac
+	shift
+done
+
+if [[ $provider ]]; then
+	case $(echo "$provider" | tr '[:upper:]' '[:lower:]') in
+		parallels | parallels-iso)
+			PACKER_PROVIDER='parallels-iso'
+			;;
+		virtualbox | virtualbox-iso)
+			PACKER_PROVIDER='virtualbox-iso'
+			;;
+		vmware | vmware-iso)
+			PACKER_PROVIDER='vmware-iso'
+			;;
+		*)
+			warn "unknown provider -- ${provider}"
+			usage
+			print_valid_providers
+			exit 1
+			;;
+	esac
+else
+	PACKER_PROVIDER='virtualbox-iso'
+fi
+
+if [[ $country ]]; then
+	if validate_country "$country"; then
+		MIRRORLIST="https://www.archlinux.org/mirrorlist/?country=${country}&protocol=http&protocol=https&ip_version=4&use_mirror_status=on"
+		MIRROR=$(curl -s "$MIRRORLIST" | awk '/#Server/{ print $3; exit }' | sed 's|/$repo.*||')
+	else
+		warn 'INVALID COUNTRY SPECIFIED - %s' "$country"
+		usage
+		print_valid_countries
+		exit 1
+	fi
+else
+	MIRROR='https://mirrors.kernel.org/archlinux'
+fi
+
+SHA1SUMS=$(curl -s "${MIRROR}/iso/latest/sha1sums.txt")
+ISO_NAME=$(echo "$SHA1SUMS" | awk '/dual.iso/{ print $2 }')
+
+ISO_URL="${MIRROR}/iso/latest/${ISO_NAME}"
+ISO_CHECKSUM=$(echo "$SHA1SUMS" | awk '/dual.iso/{ print $1 }')
+
+if [[ $dry_run ]]; then
+	cat <<-EOF
+		packer build \\
+			-only=$PACKER_PROVIDER \\
+			-var "iso_url=$ISO_URL" \\
+			-var "iso_checksum=$ISO_CHECKSUM" \\
+			arch-template.json
+	EOF
+else
+	packer build \
+		-only=$PACKER_PROVIDER \
+		-var "iso_url=$ISO_URL" \
+		-var "iso_checksum=$ISO_CHECKSUM" \
+		arch-template.json
+fi
+
+exit $?
