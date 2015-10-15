@@ -54,7 +54,7 @@
     "post-processors": [
         {
             "type": "vagrant",
-            "output": "packer_arch_{{.Provider}}.box",
+            "output": "packer_arch_{{.Provider}}.box"
         },
         {
             "type": "atlas",
