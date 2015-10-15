@@ -49,28 +49,6 @@
             "ssh_password": "vagrant",
             "ssh_timeout": "120m",
             "shutdown_command": "sudo systemctl start poweroff.timer"
-        },
-        {
-            "type": "parallels-iso",
-            "parallels_tools_flavor": "lin",
-            "parallels_tools_mode": "attach",
-            "guest_os_type": "linux-2.6",
-            "iso_url": "{{user `iso_url`}}",
-            "iso_checksum": "{{user `iso_checksum`}}",
-            "iso_checksum_type": "{{user `iso_checksum_type`}}",
-            "http_directory": ".",
-            "boot_wait": "5s",
-            "boot_command": [
-                "<enter><wait10><wait10>",
-                "/usr/bin/curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/install-parallels.sh<enter><wait5>",
-                "/usr/bin/curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/poweroff.timer<enter><wait5>",
-                "/usr/bin/curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/parallels_tools.sh<enter><wait5>",
-                "/usr/bin/bash ./install-parallels.sh<enter>"
-            ],
-            "disk_size": 20480,
-            "ssh_username": "vagrant",
-            "ssh_password": "vagrant",
-            "shutdown_command": "sudo /parallels_tools.sh && sudo rm /parallels_tools.sh && sudo systemctl start poweroff.timer"
         }
     ],
     "post-processors": [
