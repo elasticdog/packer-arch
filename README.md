@@ -75,6 +75,17 @@ Then you can import the generated box into Vagrant:
 
     $ vagrant box add arch packer_arch_parallels.box
 
+### wrapacker
+
+For convenience, there is a wrapper script named `wrapacker` that will run the
+appropriate `packer build` command for you that will also automatically ensure
+the latest ISO download URL and optionally use a mirror from a provided country
+code in order to build the final box.
+
+    $ wrapacker --country US --dry-run
+
+See the `--help` flag for additional details.
+
 Known Issues
 ------------
 
