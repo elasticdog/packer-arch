@@ -70,6 +70,9 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
 	# clean up
 	/usr/bin/pacman -Rcns --noconfirm gptfdisk
 	/usr/bin/pacman -Scc --noconfirm
+	rm -rf /var/log/journal/* /var/log/old/* /var/log/faillog /var/log/lastlog /var/log/pacman.log
+        rm -f /home/vagrant/.bash_history
+        rm -f /root/.bash_history
 EOF
 
 echo '==> entering chroot and configuring system'
@@ -83,4 +86,9 @@ echo '==> adding workaround for shutdown race condition'
 echo '==> installation complete!'
 /usr/bin/sleep 3
 /usr/bin/umount ${TARGET_DIR}
+
+cd /root
+dd if=/dev/zero of=zerofillfile bs=1M
+rm -f zerofillfile
+history -c
 /usr/bin/systemctl reboot
