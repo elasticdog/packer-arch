@@ -52,7 +52,7 @@
         }
     ],
     "post-processors": [
-        {
+        [{
             "type": "vagrant",
             "output": "packer_arch_{{.Provider}}.box"
         },
@@ -75,6 +75,6 @@
                 "provider": "virtualbox",
                 "version": "{{user `atlas_version`}}"
             }
-        }
+        }]
     ]
 }
