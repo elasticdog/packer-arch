@@ -17,6 +17,7 @@
 # country codes supported by https://www.archlinux.org/mirrorlist/
 VALID_COUNTRIES=(AT AU BD BE BG BR BY CA CH CL CN CO CZ DE DK EC ES FR GB GR HR HU ID IE IL IN IR IS IT JP KR KZ LT LU LV MK NC NL NO NZ PH PL PT RO RS RU SE SG SK TR TW UA US VN ZA)
 
+VALID_TIME_UNITS=(ns us ms s m h)
 
 ##### Functions
 
@@ -56,7 +57,7 @@ validate_country() {
 # print this script's usage message to stderr
 usage() {
 	cat <<-EOF >&2
-	usage: wrapacker [-c COUNTRY] [-p PROVIDER] [-h]
+	usage: wrapacker [-c COUNTRY] [-p PROVIDER] [-t TIMEOUT] [-h]
 	EOF
 }
 
@@ -73,6 +74,14 @@ print_valid_providers() {
 	printf '\n*** VALID PROVIDERS ***\n\n' >&2
 	for provider in {parallels,virtualbox,vmware}; do
 		printf '%-6s\n' "$provider"
+	done | column >&2
+}
+
+# print the list of valid time units to stderr
+print_valid_time_units() {
+	printf '\n*** VALID TIME UNITS ***\n\n' >&2
+	for units in "${VALID_TIME_UNITS[@]}"; do
+		printf '%-6s\n' "$units"
 	done | column >&2
 }
 
@@ -104,6 +113,10 @@ help() {
 	     -d, --dry-run
 	            do not actually perform the build, just show what would run
 
+	     -t, --timeout
+	            sets the amount of time packer will wait for trying ssh login;
+	            defaults to 15m
+
 	     -h, --help
 	            view this help message
 
@@ -125,6 +138,7 @@ done
 country=''
 provider=''
 dry_run=''
+timeout=''
 
 # parse command line options
 while [[ $1 != '' ]]; do
@@ -146,10 +160,18 @@ while [[ $1 != '' ]]; do
 		-d| --dry-run)
 			dry_run=true
 			;;
+		-t | --timeout)
+			timeout=$2
+			shift
+			;;
+		--timeout=*)
+			timeout=${1#*=}
+			;;
 		-h | --help | -\?)
 			help
 			print_valid_countries
 			print_valid_providers
+			print_valid_time_units
 			exit 0
 			;;
 		--*)
@@ -202,18 +224,31 @@ else
 	MIRROR='https://mirrors.kernel.org/archlinux'
 fi
 
+if [[ $timeout ]]; then
+	if [[ "$timeout" =~ ^[0-9]+(ns|us|ms|s|m|h)$ ]]; then
+		TIMEOUT=$timeout
+	else
+		warn 'INVALID TIME UNITS SPECIFIED or MISSING UNIT - %s' "$timeout"
+		usage
+		print_valid_time_units
+		exit 1
+	fi
+fi
+
 SHA1SUMS=$(curl -s "${MIRROR}/iso/latest/sha1sums.txt")
 ISO_NAME=$(echo "$SHA1SUMS" | awk '/dual.iso/{ print $2 }')
 
 ISO_URL="${MIRROR}/iso/latest/${ISO_NAME}"
 ISO_CHECKSUM=$(echo "$SHA1SUMS" | awk '/dual.iso/{ print $1 }')
 
+TIMEOUT=${TIMEOUT:-"15m"}
 if [[ $dry_run ]]; then
 	cat <<-EOF
 		packer build \\
 			-only=$PACKER_PROVIDER \\
 			-var "iso_url=$ISO_URL" \\
 			-var "iso_checksum=$ISO_CHECKSUM" \\
+			-var "ssh_wait_timeout=$TIMEOUT" \\
 			arch-template.json
 	EOF
 else
@@ -221,6 +256,7 @@ else
 		-only=$PACKER_PROVIDER \
 		-var "iso_url=$ISO_URL" \
 		-var "iso_checksum=$ISO_CHECKSUM" \
+		-var "ssh_wait_timeout=$TIMEOUT" \
 		arch-template.json
 fi
 
