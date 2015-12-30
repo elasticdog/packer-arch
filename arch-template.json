@@ -51,15 +51,18 @@
             "shutdown_command": "sudo systemctl start poweroff.timer"
         }
     ],
-    "provisioners": {
+    "provisioners": [
+      {
       "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "only": ["vmware-iso"],
       "scripts": [
-        "script/vmware.sh",
+        "scripts/vmware.sh",
         "custom-script.sh",
-        "script/cleanup.sh"
+        "scripts/cleanup.sh"
       ],
       "type": "shell"
-    },
+    }
+    ],
     "post-processors": [
         [{
             "type": "vagrant",
