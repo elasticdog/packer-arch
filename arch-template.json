@@ -57,7 +57,7 @@
       "scripts": [
         "script/vmware.sh",
         "custom-script.sh",
-        "script/minimize.sh",
+        "script/cleanup.sh",
       ],
       "type": "shell"
     }
