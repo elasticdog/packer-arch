@@ -56,7 +56,7 @@
       "scripts": [
         "script/vmware.sh",
         "custom-script.sh",
-        "script/cleanup.sh",
+        "script/cleanup.sh"
       ],
       "type": "shell"
     },
