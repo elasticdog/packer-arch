@@ -45,7 +45,7 @@ validate_country() {
 	local needle=$1
 	local found=1
 	for element in "${!haystack}"; do
-		if [[ $element == $needle ]]; then
+		if [[ $element == "$needle" ]]; then
 			found=0
 			break
 		fi
