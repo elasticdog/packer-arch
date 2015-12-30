@@ -17,6 +17,13 @@
 # country codes supported by https://www.archlinux.org/mirrorlist/
 readonly VALID_COUNTRIES=(AT AU BD BE BG BR BY CA CH CL CN CO CZ DE DK EC ES FR GB GR HR HU ID IE IL IN IR IS IT JP KR KZ LT LU LV MK NC NL NO NZ PH PL PT RO RS RU SE SG SK TR TW UA US VN ZA)
 
+# use the correct binary if running from arch linux
+if [[ -f /etc/arch-release ]]; then
+	readonly PACKER_BIN='packer-io'
+else
+	readonly PACKER_BIN='packer'
+fi
+
 
 ##### Functions
 
@@ -210,14 +217,14 @@ ISO_CHECKSUM=$(echo "$SHA1SUMS" | awk '/dual.iso/{ print $1 }')
 
 if [[ $dry_run ]]; then
 	cat <<-EOF
-		packer build \\
+		$PACKER_BIN build \\
 			-only=$PACKER_PROVIDER \\
 			-var "iso_url=$ISO_URL" \\
 			-var "iso_checksum=$ISO_CHECKSUM" \\
 			arch-template.json
 	EOF
 else
-	packer build \
+	$PACKER_BIN build \
 		-only=$PACKER_PROVIDER \
 		-var "iso_url=$ISO_URL" \
 		-var "iso_checksum=$ISO_CHECKSUM" \
