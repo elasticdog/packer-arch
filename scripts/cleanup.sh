@@ -1,5 +1,5 @@
 #!/bin/bash -eux
-
+# Borrowed from Boxcutter, https://github.com/boxcutter/ubuntu/blob/master/script/cleanup.sh
 SSH_USER=${SSH_USERNAME:-vagrant}
 
 # Make sure udev does not block our network - http://6.ptmc.org/?p=164
