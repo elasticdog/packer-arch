@@ -248,7 +248,7 @@ if [[ $dry_run ]]; then
 			-only=$PACKER_PROVIDER \\
 			-var "iso_url=$ISO_URL" \\
 			-var "iso_checksum=$ISO_CHECKSUM" \\
-			-var "ssh_wait_timeout=$TIMEOUT" \\
+			-var "ssh_timeout=$TIMEOUT" \\
 			arch-template.json
 	EOF
 else
@@ -256,7 +256,7 @@ else
 		-only=$PACKER_PROVIDER \
 		-var "iso_url=$ISO_URL" \
 		-var "iso_checksum=$ISO_CHECKSUM" \
-		-var "ssh_wait_timeout=$TIMEOUT" \
+		-var "ssh_timeout=$TIMEOUT" \
 		arch-template.json
 fi
 
