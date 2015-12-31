@@ -3,7 +3,7 @@
         "iso_url": "https://mirrors.kernel.org/archlinux/iso/2015.12.01/archlinux-2015.12.01-dual.iso",
         "iso_checksum": "7de3315b1384e5d2769eca13453e87a8d303050e",
         "iso_checksum_type": "sha1",
-        "ssh_timeout": "15m"
+        "ssh_timeout": "20m"
     },
     "builders": [
         {

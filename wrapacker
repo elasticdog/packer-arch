@@ -115,7 +115,7 @@ help() {
 
 	     -t, --timeout
 	            sets the amount of time packer will wait for trying ssh login;
-	            defaults to 15m
+	            defaults to 20m
 
 	     -h, --help
 	            view this help message
