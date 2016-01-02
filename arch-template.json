@@ -4,6 +4,7 @@
         "atlas_username": "{{env `ATLAS_USERNAME`}}",
         "atlas_name": "{{env `ATLAS_NAME`}}",
         "atlas_version": "{{env `ATLAS_BUILD_NUMBER`}}",
+        "install_script": "install-arch-base.sh",
         "iso_url": "https://mirrors.kernel.org/archlinux/iso/2015.10.01/archlinux-2015.10.01-dual.iso",
         "iso_checksum": "6d95a2a35e29b23d6abd30011c6ab8220250efb6",
         "iso_checksum_type": "sha1"
@@ -20,9 +21,9 @@
             "boot_wait": "5s",
             "boot_command": [
                 "<enter><wait10><wait10>",
-                "/usr/bin/curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/install-virtualbox.sh<enter><wait5>",
+                "/usr/bin/curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/{{user `install_script`}}<enter><wait5>",
                 "/usr/bin/curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/poweroff.timer<enter><wait5>",
-                "/usr/bin/bash ./install-virtualbox.sh<enter>"
+                "/usr/bin/bash ./{{user `install_script`}}<enter>"
             ],
             "disk_size": 20480,
             "hard_drive_interface": "sata",
@@ -40,9 +41,9 @@
             "boot_wait": "5s",
             "boot_command": [
                 "<enter><wait10><wait10>",
-                "/usr/bin/curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/install-vmware.sh<enter><wait5>",
+                "/usr/bin/curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/{{user `install_script`}}<enter><wait5>",
                 "/usr/bin/curl -O http://{{.HTTPIP}}:{{.HTTPPort}}/poweroff.timer<enter><wait5>",
-                "/usr/bin/bash ./install-vmware.sh<enter>"
+                "/usr/bin/bash ./{{user `install_script`}}<enter>"
             ],
             "disk_size": 20480,
             "ssh_username": "vagrant",
