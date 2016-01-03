@@ -55,14 +55,24 @@
     "provisioners": [
       {
       "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "only": ["virtualbox-iso"],
+      "script": "scripts/virtualbox.sh",
+      "type": "shell"
+      },
+      {
+      "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "only": ["vmware-iso"],
+      "script": "scripts/vmware.sh",
+      "type": "shell"
+      },
+      {
+      "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
-        "scripts/vmware.sh",
         "custom-script.sh",
         "scripts/cleanup.sh"
       ],
       "type": "shell"
-    }
+      }
     ],
     "post-processors": [
         [{
