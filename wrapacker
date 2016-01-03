@@ -203,11 +203,11 @@ if [[ $provider ]]; then
 			;;
 		virtualbox | virtualbox-iso)
             PACKER_PROVIDER='virtualbox-iso'
-            INSTALL_SCRIPT="install-virtualbox"
+            INSTALL_SCRIPT="install-virtualbox.sh"
 			;;
 		vmware | vmware-iso)
             PACKER_PROVIDER='vmware-iso'
-            INSTALL_SCRIPT="install-vmware"
+            INSTALL_SCRIPT="install-vmware.sh"
 			;;
 		*)
 			warn "unknown provider -- ${provider}"
