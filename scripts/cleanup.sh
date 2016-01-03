@@ -8,6 +8,7 @@ rm -rf /dev/.udev/
 
 echo "==> Cleaning up tmp"
 rm -rf /tmp/*
+rm -rf /home/${SSH_USER}/tmp
 
 DISK_USAGE_BEFORE_CLEANUP=$(df -h)
 
