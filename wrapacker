@@ -231,31 +231,32 @@ else
 	MIRROR='https://mirrors.kernel.org/archlinux'
 fi
 
-if [[ $timeout ]]; then
-	if [[ "$timeout" =~ ^[0-9]+(ns|us|ms|s|m|h)$ ]]; then
-		TIMEOUT=$timeout
-	else
-		warn 'INVALID TIME UNITS SPECIFIED or MISSING UNIT - %s' "$timeout"
-		usage
-		print_valid_time_units
-		exit 1
-	fi
-fi
-
 SHA1SUMS=$(curl -s "${MIRROR}/iso/latest/sha1sums.txt")
 ISO_NAME=$(echo "$SHA1SUMS" | awk '/dual.iso/{ print $2 }')
 
 ISO_URL="${MIRROR}/iso/latest/${ISO_NAME}"
 ISO_CHECKSUM=$(echo "$SHA1SUMS" | awk '/dual.iso/{ print $1 }')
 
-TIMEOUT=${TIMEOUT:-"15m"}
+if [[ $timeout ]]; then
+	if [[ "$timeout" =~ ^[0-9]+(ns|us|ms|s|m|h)$ ]]; then
+		SSH_TIMEOUT=$timeout
+	else
+		warn 'INVALID TIME UNITS SPECIFIED or MISSING UNIT - %s' "$timeout"
+		usage
+		print_valid_time_units
+		exit 1
+	fi
+else
+	SSH_TIMEOUT='20m'
+fi
+
 if [[ $dry_run ]]; then
 	cat <<-EOF
 		$PACKER_BIN build \\
 			-only=$PACKER_PROVIDER \\
 			-var "iso_url=$ISO_URL" \\
 			-var "iso_checksum=$ISO_CHECKSUM" \\
-			-var "ssh_timeout=$TIMEOUT" \\
+			-var "ssh_timeout=$SSH_TIMEOUT" \\
 			arch-template.json
 	EOF
 else
@@ -263,7 +264,7 @@ else
 		-only=$PACKER_PROVIDER \
 		-var "iso_url=$ISO_URL" \
 		-var "iso_checksum=$ISO_CHECKSUM" \
-		-var "ssh_timeout=$TIMEOUT" \
+		-var "ssh_timeout=$SSH_TIMEOUT" \
 		arch-template.json
 fi
 
