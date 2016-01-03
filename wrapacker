@@ -64,7 +64,7 @@ validate_country() {
 # print this script's usage message to stderr
 usage() {
 	cat <<-EOF >&2
-	usage: wrapacker [-c COUNTRY] [-p PROVIDER] [-t TIMEOUT] [-h]
+	usage: wrapacker [-c COUNTRY] [-p PROVIDER] [-t TIMEOUT] [-d] [-h]
 	EOF
 }
 
@@ -117,12 +117,12 @@ help() {
 	            the packer provider to build with;
 	            defaults to virtualbox
 
-	     -d, --dry-run
-	            do not actually perform the build, just show what would run
-
-	     -t, --timeout
+	     -t, --timeout=TIMEOUT
 	            sets the amount of time packer will wait for trying ssh login;
 	            defaults to 20m
+
+	     -d, --dry-run
+	            do not actually perform the build, just show what would run
 
 	     -h, --help
 	            view this help message
@@ -164,15 +164,15 @@ while [[ $1 != '' ]]; do
 		--provider=*)
 			provider=${1#*=}
 			;;
-		-d| --dry-run)
-			dry_run=true
-			;;
 		-t | --timeout)
 			timeout=$2
 			shift
 			;;
 		--timeout=*)
 			timeout=${1#*=}
+			;;
+		-d| --dry-run)
+			dry_run=true
 			;;
 		-h | --help | -\?)
 			help
