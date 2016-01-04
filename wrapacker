@@ -201,7 +201,7 @@ if [[ $provider ]]; then
 		parallels | parallels-iso)
             PACKER_PROVIDER='parallels-iso'
             INSTALL_SCRIPT="install-parallels.sh"
-            PACKER_TEMPLATE='arch-template-parallels.json'
+            PACKER_TEMPLATE='arch-template-parallels'
 			;;
 		virtualbox | virtualbox-iso)
             PACKER_PROVIDER='virtualbox-iso'
