@@ -195,16 +195,21 @@ while [[ $1 != '' ]]; do
 	shift
 done
 
+PACKER_TEMPLATE='arch-template.json'
 if [[ $provider ]]; then
 	case $(echo "$provider" | tr '[:upper:]' '[:lower:]') in
 		parallels | parallels-iso)
-			PACKER_PROVIDER='parallels-iso'
+            PACKER_PROVIDER='parallels-iso'
+            INSTALL_SCRIPT="install-parallels.sh"
+            PACKER_TEMPLATE='arch-template-parallels'
 			;;
 		virtualbox | virtualbox-iso)
-			PACKER_PROVIDER='virtualbox-iso'
+            PACKER_PROVIDER='virtualbox-iso'
+            INSTALL_SCRIPT="install-virtualbox.sh"
 			;;
 		vmware | vmware-iso)
-			PACKER_PROVIDER='vmware-iso'
+            PACKER_PROVIDER='vmware-iso'
+            INSTALL_SCRIPT="install-vmware.sh"
 			;;
 		*)
 			warn "unknown provider -- ${provider}"
@@ -254,18 +259,20 @@ if [[ $dry_run ]]; then
 	cat <<-EOF
 		$PACKER_BIN build \\
 			-only=$PACKER_PROVIDER \\
+            -var "install_script=$INSTALL_SCRIPT" \\
 			-var "iso_url=$ISO_URL" \\
 			-var "iso_checksum=$ISO_CHECKSUM" \\
-			-var "ssh_timeout=$SSH_TIMEOUT" \\
-			arch-template.json
+			-var "ssh_timeout=$TIMEOUT" \\
+            $PACKER_TEMPLATE
 	EOF
 else
 	$PACKER_BIN build \
 		-only=$PACKER_PROVIDER \
+        -var "install_script=$INSTALL_SCRIPT" \
 		-var "iso_url=$ISO_URL" \
 		-var "iso_checksum=$ISO_CHECKSUM" \
-		-var "ssh_timeout=$SSH_TIMEOUT" \
-		arch-template.json
+		-var "ssh_timeout=$TIMEOUT" \
+        $PACKER_TEMPLATE
 fi
 
 exit $?

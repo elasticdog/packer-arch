@@ -58,7 +58,8 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
 	/usr/bin/systemctl enable sshd.service
 
 	# Vagrant-specific configuration
-	/usr/bin/useradd --password ${PASSWORD} --comment 'Vagrant User' --create-home --gid users vagrant
+	/usr/bin/groupadd vagrant
+	/usr/bin/useradd --password ${PASSWORD} --comment 'Vagrant User' --create-home --gid users --groups vagrant vagrant
 	echo 'Defaults env_keep += "SSH_AUTH_SOCK"' > /etc/sudoers.d/10_vagrant
 	echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers.d/10_vagrant
 	/usr/bin/chmod 0440 /etc/sudoers.d/10_vagrant
@@ -68,11 +69,11 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
 	/usr/bin/chmod 0600 /home/vagrant/.ssh/authorized_keys
 
 	# clean up
+	rm -rf /var/log/journal/* /var/log/old/* /var/log/faillog /var/log/lastlog /var/log/pacman.log
+  rm -f /home/vagrant/.bash_history
+  rm -f /root/.bash_history
 	/usr/bin/pacman -Rcns --noconfirm gptfdisk
 	/usr/bin/pacman -Scc --noconfirm
-	rm -rf /var/log/journal/* /var/log/old/* /var/log/faillog /var/log/lastlog /var/log/pacman.log
-        rm -f /home/vagrant/.bash_history
-        rm -f /root/.bash_history
 EOF
 
 echo '==> entering chroot and configuring system'
