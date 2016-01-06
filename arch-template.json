@@ -68,12 +68,6 @@
       },
       {
       "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
-      "only": ["parallels-iso"],
-      "script": "scripts/parallels.sh",
-      "type": "shell"
-      },
-      {
-      "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
         "custom-script.sh",
         "scripts/cleanup.sh"
