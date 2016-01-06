@@ -69,7 +69,6 @@
       {
       "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
-        "custom-script.sh",
         "scripts/cleanup.sh"
       ],
       "type": "shell"
