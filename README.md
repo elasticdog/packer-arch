@@ -1,7 +1,7 @@
 Packer Arch
 ===========
 
-Packer Arch is a bare bones [Packer](https://packer.io/) template and
+Packer Arch is a bare bones [Packer](https://www.packer.io/) template and
 installation script that can be used to generate a [Vagrant](https://www.vagrantup.com/)
 base box for [Arch Linux](https://www.archlinux.org/). The template works
 with the default VirtualBox provider as well as with
