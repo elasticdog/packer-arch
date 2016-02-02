@@ -1,7 +1,7 @@
 {
     "variables": {
-        "iso_url": "https://mirrors.kernel.org/archlinux/iso/2016.01.01/archlinux-2016.01.01-dual.iso",
-        "iso_checksum": "ff79a9629a83dfedad6c3a58e2e7838c86282315",
+        "iso_url": "https://mirrors.kernel.org/archlinux/iso/2016.02.01/archlinux-2016.02.01-dual.iso",
+        "iso_checksum": "37427c722ffc57c15fb984287c34d5d48cc84247",
         "iso_checksum_type": "sha1",
         "ssh_timeout": "20m"
     },
