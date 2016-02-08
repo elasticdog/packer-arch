@@ -92,7 +92,7 @@ Known Issues
 ### VMware Tools
 
 The official VMware Tools do not currently support Arch Linux, and the
-[Open Virtual Machine Tools](http://open-vm-tools.sourceforge.net/)
+[Open Virtual Machine Tools](https://github.com/vmware/open-vm-tools)
 (open-vm-tools) require extensive patching in order to compile correctly
 with a Linux 3.11 series kernel. So for the time being, I have not
 included support for the tools.
