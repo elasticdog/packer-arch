@@ -42,7 +42,7 @@ should be good to clone this repo and go:
 
 Then you can import the generated box into Vagrant:
 
-    $ vagrant box add arch packer_arch_virtualbox.box
+    $ vagrant box add arch output/packer_arch_virtualbox.box
 
 ### VMware Provider
 
@@ -58,7 +58,7 @@ this repo and go:
 
 Then you can import the generated box into Vagrant:
 
-    $ vagrant box add arch packer_arch_vmware.box
+    $ vagrant box add arch output/packer_arch_vmware.box
 
 ### Parallels Provider
 
@@ -73,7 +73,7 @@ this repo and go:
 
 Then you can import the generated box into Vagrant:
 
-    $ vagrant box add arch packer_arch_parallels.box
+    $ vagrant box add arch output/packer_arch_parallels.box
 
 ### wrapacker
 

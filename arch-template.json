@@ -74,7 +74,7 @@
     "post-processors": [
         {
             "type": "vagrant",
-            "output": "packer_arch_{{.Provider}}.box"
+            "output": "output/packer_arch_{{.Provider}}.box"
         }
     ]
 }
