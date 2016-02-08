@@ -1,11 +1,11 @@
 Packer Arch
 ===========
 
-Packer Arch is a bare bones [Packer](http://www.packer.io/) template and
-installation script that can be used to generate a [Vagrant](http://www.vagrantup.com/)
+Packer Arch is a bare bones [Packer](https://www.packer.io/) template and
+installation script that can be used to generate a [Vagrant](https://www.vagrantup.com/)
 base box for [Arch Linux](https://www.archlinux.org/). The template works
 with the default VirtualBox provider as well as with
-[VMware](http://www.vagrantup.com/vmware) and [Parallels](https://github.com/Parallels/vagrant-parallels) providers.
+[VMware](https://www.vagrantup.com/vmware) and [Parallels](https://github.com/Parallels/vagrant-parallels) providers.
 
 Overview
 --------
@@ -115,7 +115,7 @@ guest additions work just fine.
 
 The box purposefully does not include Puppet or Chef for automatic Vagrant
 provisioning. My intention was to duplicate a DigitalOcean VPS and
-furthermore use the VM for testing [Ansible](http://www.ansibleworks.com/)
+furthermore use the VM for testing [Ansible](http://www.ansible.com/)
 playbooks for configuration management.
 
 License
@@ -124,4 +124,4 @@ License
 Packer Arch is provided under the terms of the
 [ISC License](https://en.wikipedia.org/wiki/ISC_license).
 
-Copyright &copy; 2013&#8211;2015, [Aaron Bull Schaefer](mailto:aaron@elasticdog.com).
+Copyright &copy; 2013&#8211;2016, [Aaron Bull Schaefer](mailto:aaron@elasticdog.com).
