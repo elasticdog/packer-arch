@@ -82,6 +82,12 @@
             "type": "shell",
             "execute_command": "{{ .Vars }} sudo -E -S bash '{{ .Path }}'",
             "script": "scripts/install-virtualbox.sh"
+        },
+        {
+            "only": ["virtualbox-iso"],
+            "type": "shell",
+            "execute_command": "{{ .Vars }} sudo -E -S bash '{{ .Path }}'",
+            "script": "scripts/cleanup.sh"
         }
     ],
     "post-processors": [
