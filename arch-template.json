@@ -48,7 +48,8 @@
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_timeout": "{{ user `ssh_timeout` }}",
-            "shutdown_command": "sudo systemctl start poweroff.timer"
+            "shutdown_command": "sudo systemctl start poweroff.timer",
+            "headless" : "{{ user `headless`}}"
         },
         {
             "type": "vmware-iso",
