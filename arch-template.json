@@ -1,7 +1,7 @@
 {
     "variables": {
         "iso_url": "https://mirrors.kernel.org/archlinux/iso/2016.05.01/archlinux-2016.05.01-dual.iso",
-        "iso_checksum": "1ce0bbedb9fb77facda61cb8d4df763159745b18",
+        "iso_checksum_url": "https://mirrors.kernel.org/archlinux/iso/2016.05.01/sha1sums.txt",
         "iso_checksum_type": "sha1",
         "ssh_timeout": "20m"
     },
@@ -12,7 +12,7 @@
             "parallels_tools_mode": "attach",
             "guest_os_type": "linux-2.6",
             "iso_url": "{{ user `iso_url` }}",
-            "iso_checksum": "{{ user `iso_checksum` }}",
+            "iso_checksum_url": "{{ user `iso_checksum_url` }}",
             "iso_checksum_type": "{{ user `iso_checksum_type` }}",
             "http_directory": "srv",
             "boot_wait": "5s",
@@ -31,7 +31,7 @@
         {
             "type": "virtualbox-iso",
             "iso_url": "{{ user `iso_url` }}",
-            "iso_checksum": "{{ user `iso_checksum` }}",
+            "iso_checksum_url": "{{ user `iso_checksum_url` }}",
             "iso_checksum_type": "{{ user `iso_checksum_type` }}",
             "guest_os_type": "ArchLinux_64",
             "guest_additions_mode": "disable",
@@ -54,7 +54,7 @@
         {
             "type": "vmware-iso",
             "iso_url": "{{ user `iso_url` }}",
-            "iso_checksum": "{{ user `iso_checksum` }}",
+            "iso_checksum_url": "{{ user `iso_checksum_url` }}",
             "iso_checksum_type": "{{ user `iso_checksum_type` }}",
             "http_directory": "srv",
             "boot_wait": "5s",
