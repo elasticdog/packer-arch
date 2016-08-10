@@ -25,7 +25,7 @@ echo "==> setting ${DISK} bootable"
 /usr/bin/sgdisk ${DISK} --attributes=1:set:2
 
 echo '==> creating /root filesystem (ext4)'
-/usr/bin/mkfs.ext4 -F -m 0 -q -L root ${ROOT_PARTITION}
+/usr/bin/mkfs.ext4 -O ^64bit -F -m 0 -q -L root ${ROOT_PARTITION}
 
 echo "==> mounting ${ROOT_PARTITION} to ${TARGET_DIR}"
 /usr/bin/mount -o noatime,errors=remount-ro ${ROOT_PARTITION} ${TARGET_DIR}
