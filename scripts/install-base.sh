@@ -11,36 +11,36 @@ CONFIG_SCRIPT='/usr/local/bin/arch-config.sh'
 ROOT_PARTITION="${DISK}1"
 TARGET_DIR='/mnt'
 
-echo "==> clearing partition table on ${DISK}"
+echo "==> Clearing partition table on ${DISK}"
 /usr/bin/sgdisk --zap ${DISK}
 
-echo "==> destroying magic strings and signatures on ${DISK}"
+echo "==> Destroying magic strings and signatures on ${DISK}"
 /usr/bin/dd if=/dev/zero of=${DISK} bs=512 count=2048
 /usr/bin/wipefs --all ${DISK}
 
-echo "==> creating /root partition on ${DISK}"
+echo "==> Creating /root partition on ${DISK}"
 /usr/bin/sgdisk --new=1:0:0 ${DISK}
 
-echo "==> setting ${DISK} bootable"
+echo "==> Setting ${DISK} bootable"
 /usr/bin/sgdisk ${DISK} --attributes=1:set:2
 
-echo '==> creating /root filesystem (ext4)'
+echo '==> Creating /root filesystem (ext4)'
 /usr/bin/mkfs.ext4 -O ^64bit -F -m 0 -q -L root ${ROOT_PARTITION}
 
-echo "==> mounting ${ROOT_PARTITION} to ${TARGET_DIR}"
+echo "==> Mounting ${ROOT_PARTITION} to ${TARGET_DIR}"
 /usr/bin/mount -o noatime,errors=remount-ro ${ROOT_PARTITION} ${TARGET_DIR}
 
-echo '==> bootstrapping the base installation'
+echo '==> Bootstrapping the base installation'
 /usr/bin/pacstrap ${TARGET_DIR} base base-devel
 /usr/bin/arch-chroot ${TARGET_DIR} pacman -S --noconfirm gptfdisk openssh syslinux
 /usr/bin/arch-chroot ${TARGET_DIR} syslinux-install_update -i -a -m
 /usr/bin/sed -i 's/sda3/sda1/' "${TARGET_DIR}/boot/syslinux/syslinux.cfg"
 /usr/bin/sed -i 's/TIMEOUT 50/TIMEOUT 10/' "${TARGET_DIR}/boot/syslinux/syslinux.cfg"
 
-echo '==> generating the filesystem table'
+echo '==> Generating the filesystem table'
 /usr/bin/genfstab -p ${TARGET_DIR} >> "${TARGET_DIR}/etc/fstab"
 
-echo '==> generating the system configuration script'
+echo '==> Generating the system configuration script'
 /usr/bin/install --mode=0755 /dev/null "${TARGET_DIR}${CONFIG_SCRIPT}"
 
 cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
@@ -71,15 +71,15 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
 	/usr/bin/pacman -Rcns --noconfirm gptfdisk
 EOF
 
-echo '==> entering chroot and configuring system'
+echo '==> Entering chroot and configuring system'
 /usr/bin/arch-chroot ${TARGET_DIR} ${CONFIG_SCRIPT}
 rm "${TARGET_DIR}${CONFIG_SCRIPT}"
 
 # http://comments.gmane.org/gmane.linux.arch.general/48739
-echo '==> adding workaround for shutdown race condition'
-/usr/bin/install --mode=0644 poweroff.timer "${TARGET_DIR}/etc/systemd/system/poweroff.timer"
+echo '==> Adding workaround for shutdown race condition'
+/usr/bin/install --mode=0644 /root/poweroff.timer "${TARGET_DIR}/etc/systemd/system/poweroff.timer"
 
-echo '==> installation complete!'
+echo '==> Installation complete!'
 /usr/bin/sleep 3
 /usr/bin/umount ${TARGET_DIR}
 /usr/bin/systemctl reboot
