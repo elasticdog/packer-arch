@@ -231,11 +231,9 @@ else
 	MIRROR='https://mirrors.kernel.org/archlinux'
 fi
 
-SHA1SUMS=$(curl -s "${MIRROR}/iso/latest/sha1sums.txt")
-ISO_NAME=$(echo "$SHA1SUMS" | awk '/dual.iso/{ print $2 }')
-
+ISO_CHECKSUM_URL="${MIRROR}/iso/latest/sha1sums.txt"
+ISO_NAME=$(curl -s "$ISO_CHECKSUM_URL" | awk '/dual.iso/{ print $2 }')
 ISO_URL="${MIRROR}/iso/latest/${ISO_NAME}"
-ISO_CHECKSUM=$(echo "$SHA1SUMS" | awk '/dual.iso/{ print $1 }')
 
 if [[ $timeout ]]; then
 	if [[ "$timeout" =~ ^[0-9]+(ns|us|ms|s|m|h)$ ]]; then
@@ -255,7 +253,7 @@ if [[ $dry_run ]]; then
 		$PACKER_BIN build \\
 			-only=$PACKER_PROVIDER \\
 			-var "iso_url=$ISO_URL" \\
-			-var "iso_checksum=$ISO_CHECKSUM" \\
+			-var "iso_checksum_url=$ISO_CHECKSUM_URL" \\
 			-var "ssh_timeout=$SSH_TIMEOUT" \\
 			arch-template.json
 	EOF
@@ -263,7 +261,7 @@ else
 	$PACKER_BIN build \
 		-only=$PACKER_PROVIDER \
 		-var "iso_url=$ISO_URL" \
-		-var "iso_checksum=$ISO_CHECKSUM" \
+		-var "iso_checksum_url=$ISO_CHECKSUM_URL" \
 		-var "ssh_timeout=$SSH_TIMEOUT" \
 		arch-template.json
 fi
