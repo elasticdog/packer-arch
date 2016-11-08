@@ -18,9 +18,9 @@
             "boot_wait": "5s",
             "boot_command": [
                 "<enter><wait10><wait10>",
-                "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/install-ssh.sh<enter><wait5>",
+                "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/enable-ssh.sh<enter><wait5>",
                 "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/poweroff.timer<enter><wait5>",
-                "/usr/bin/bash ./install-ssh.sh<enter>"
+                "/usr/bin/bash ./enable-ssh.sh<enter>"
             ],
             "disk_size": 20480,
             "ssh_username": "vagrant",
@@ -39,9 +39,9 @@
             "boot_wait": "5s",
             "boot_command": [
                 "<enter><wait10><wait10>",
-                "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/install-ssh.sh<enter><wait5>",
+                "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/enable-ssh.sh<enter><wait5>",
                 "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/poweroff.timer<enter><wait5>",
-                "/usr/bin/bash ./install-ssh.sh<enter>"
+                "/usr/bin/bash ./enable-ssh.sh<enter>"
             ],
             "disk_size": 20480,
             "hard_drive_interface": "sata",
@@ -60,9 +60,9 @@
             "boot_wait": "5s",
             "boot_command": [
                 "<enter><wait10><wait10>",
-                "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/install-ssh.sh<enter><wait5>",
+                "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/enable-ssh.sh<enter><wait5>",
                 "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/poweroff.timer<enter><wait5>",
-                "/usr/bin/bash ./install-ssh.sh<enter>"
+                "/usr/bin/bash ./enable-ssh.sh<enter>"
             ],
             "disk_size": 20480,
             "ssh_username": "vagrant",
