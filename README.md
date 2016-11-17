@@ -5,7 +5,8 @@ Packer Arch is a bare bones [Packer](https://www.packer.io/) template and
 installation script that can be used to generate a [Vagrant](https://www.vagrantup.com/)
 base box for [Arch Linux](https://www.archlinux.org/). The template works
 with the default VirtualBox provider as well as with
-[VMware](https://www.vagrantup.com/vmware) and [Parallels](https://github.com/Parallels/vagrant-parallels) providers.
+[VMware](https://www.vagrantup.com/vmware), [Parallels](https://github.com/Parallels/vagrant-parallels)
+and [libvirt](https://github.com/vagrant-libvirt/vagrant-libvirt) providers.
 
 Overview
 --------
@@ -74,6 +75,23 @@ this repo and go:
 Then you can import the generated box into Vagrant:
 
     $ vagrant box add arch output/packer_arch_parallels.box
+
+### libvirt Provider
+
+Assuming that you already have Packer, Vagrant with the
+[vagrant-libvirt](https://github.com/vagrant-libvirt/vagrant-libvirt)
+plugin installed, you should be good to clone
+this repo and go:
+
+    $ git clone https://github.com/elasticdog/packer-arch.git
+    $ cd packer-arch/
+    $ packer build -only=libvirt arch-template.json
+
+Then you can import the generated box into Vagrant:
+
+    $ vagrant box add arch output/packer_arch_libvirt.box
+
+NOTE: libvirt support is limited to QEMU/KVM only.
 
 ### wrapacker
 

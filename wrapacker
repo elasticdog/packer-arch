@@ -79,7 +79,7 @@ print_valid_countries() {
 # print the list of valid providers to stderr
 print_valid_providers() {
 	printf '\n*** VALID PROVIDERS ***\n\n' >&2
-	for provider in {parallels,virtualbox,vmware}; do
+	for provider in {parallels,virtualbox,vmware,libvirt}; do
 		printf '%-6s\n' "$provider"
 	done | column >&2
 }
@@ -206,6 +206,9 @@ if [[ $provider ]]; then
 		vmware | vmware-iso)
 			PACKER_PROVIDER='vmware-iso'
 			;;
+		libvirt )
+			PACKER_PROVIDER='qemu'
+			;;
 		*)
 			warn "unknown provider -- ${provider}"
 			usage
@@ -229,6 +232,7 @@ if [[ $country ]]; then
 	fi
 else
 	MIRROR='https://mirrors.kernel.org/archlinux'
+	country='US'
 fi
 
 ISO_CHECKSUM_URL="${MIRROR}/iso/latest/sha1sums.txt"
@@ -255,6 +259,7 @@ if [[ $dry_run ]]; then
 			-var "iso_url=$ISO_URL" \\
 			-var "iso_checksum_url=$ISO_CHECKSUM_URL" \\
 			-var "ssh_timeout=$SSH_TIMEOUT" \\
+			-var "country=$country" \\
 			arch-template.json
 	EOF
 else
@@ -263,6 +268,7 @@ else
 		-var "iso_url=$ISO_URL" \
 		-var "iso_checksum_url=$ISO_CHECKSUM_URL" \
 		-var "ssh_timeout=$SSH_TIMEOUT" \
+		-var "country=$country" \
 		arch-template.json
 fi
 
