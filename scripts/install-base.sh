@@ -3,7 +3,7 @@
 # stop on errors
 set -eu
 
-if [ "$PACKER_BUILDER_TYPE" == "qemu" ]
+if [[ "$PACKER_BUILDER_TYPE" == "qemu" ]]
 then
   DISK='/dev/vda'
 else
