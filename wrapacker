@@ -206,7 +206,7 @@ if [[ $provider ]]; then
 		vmware | vmware-iso)
 			PACKER_PROVIDER='vmware-iso'
 			;;
-		libvirt )
+		libvirt | qemu)
 			PACKER_PROVIDER='qemu'
 			;;
 		*)
