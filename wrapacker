@@ -127,6 +127,10 @@ help() {
 	     -h, --help
 	            view this help message
 
+	     -e, --headless
+	            do not run the build in the GUI
+	            only works with --provider=virtualbox
+
 	AUTHOR
 	     Aaron Bull Schaefer <aaron@elasticdog.com>
 
@@ -146,6 +150,7 @@ country=''
 provider=''
 dry_run=''
 timeout=''
+headless=false
 
 # parse command line options
 while [[ $1 != '' ]]; do
@@ -180,6 +185,9 @@ while [[ $1 != '' ]]; do
 			print_valid_providers
 			print_valid_time_units
 			exit 0
+			;;
+		-e| --headless)
+			headless=true
 			;;
 		--*)
 			warn "unknown option -- ${1#--}"
@@ -260,6 +268,7 @@ if [[ $dry_run ]]; then
 			-var "iso_checksum_url=$ISO_CHECKSUM_URL" \\
 			-var "ssh_timeout=$SSH_TIMEOUT" \\
 			-var "country=$country" \\
+			-var "headless=$headless" \\
 			arch-template.json
 	EOF
 else
@@ -269,6 +278,7 @@ else
 		-var "iso_checksum_url=$ISO_CHECKSUM_URL" \
 		-var "ssh_timeout=$SSH_TIMEOUT" \
 		-var "country=$country" \
+		-var "headless=$headless" \
 		arch-template.json
 fi
 
