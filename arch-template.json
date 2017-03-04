@@ -4,7 +4,8 @@
         "iso_checksum_url": "https://mirrors.kernel.org/archlinux/iso/2017.01.01/sha1sums.txt",
         "iso_checksum_type": "sha1",
         "ssh_timeout": "20m",
-        "country": "US"
+        "country": "US",
+        "headless": "false"
     },
     "builders": [
         {
@@ -69,7 +70,8 @@
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_timeout": "{{ user `ssh_timeout` }}",
-            "shutdown_command": "sudo systemctl start poweroff.timer"
+            "shutdown_command": "sudo systemctl start poweroff.timer",
+            "headless" : "{{ user `headless`}}"
         },
         {
             "type": "qemu",
@@ -88,7 +90,8 @@
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
             "ssh_timeout": "{{ user `ssh_timeout` }}",
-            "shutdown_command": "sudo systemctl start poweroff.timer"
+            "shutdown_command": "sudo systemctl start poweroff.timer",
+            "headless" : "{{ user `headless`}}"
         }
     ],
     "provisioners": [

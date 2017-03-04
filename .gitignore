@@ -1,2 +1,3 @@
 output/*.box
+output-qemu/*
 packer_cache
