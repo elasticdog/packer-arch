@@ -58,6 +58,7 @@ echo '==> Generating the system configuration script'
 
 cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
 	echo '${FQDN}' > /etc/hostname
+	/usr/bin/rm -f /etc/localtime
 	/usr/bin/ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
 	echo 'KEYMAP=${KEYMAP}' > /etc/vconsole.conf
 	/usr/bin/sed -i 's/#${LANGUAGE}/${LANGUAGE}/' /etc/locale.gen
