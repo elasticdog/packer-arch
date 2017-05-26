@@ -118,6 +118,16 @@
             "script": "scripts/cleanup.sh"
         }
     ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "sleep 30",
+                "sudo pacman --noconfirm -Syu",
+                "sudo pacman --noconfirm -S python2"
+            ]
+        }
+    ],
     "post-processors": [
         {
             "type": "vagrant",
