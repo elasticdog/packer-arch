@@ -122,7 +122,7 @@
     "post-processors": [
         {
             "type": "vagrant",
-            "output": "output/packer_arch_{{ .Provider }}-{{isotime \"2006.01.02\"}}.box"
+            "output": "output/packer_arch_{{ .Provider }}-{{isotime \"2006.01\"}}.01.box"
         }
     ]
 }
