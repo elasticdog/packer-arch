@@ -114,6 +114,12 @@
             "script": "scripts/install-virtualbox.sh"
         },
         {
+            "only": ["vmware-iso"],
+            "type": "shell",
+            "execute_command": "{{ .Vars }} sudo -E -S bash '{{ .Path }}'",
+            "script": "scripts/install-vmware.sh"
+        },
+        {
             "type": "shell",
             "execute_command": "{{ .Vars }} sudo -E -S bash '{{ .Path }}'",
             "script": "scripts/cleanup.sh"
