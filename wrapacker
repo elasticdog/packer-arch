@@ -17,8 +17,8 @@
 # country codes supported by https://www.archlinux.org/mirrorlist/
 readonly VALID_COUNTRIES=(AT AU BD BE BG BR BY CA CH CL CN CO CZ DE DK EC ES FR GB GR HR HU ID IE IL IN IR IS IT JP KR KZ LT LU LV MK NC NL NO NZ PH PL PT RO RS RU SE SG SK TR TW UA US VN ZA)
 
-# use the correct binary if running from arch linux
-if [[ -f /etc/arch-release ]]; then
+if command -v packer-io > /dev/null 2>&1; then
+	# Older arch linux versions called the packer binary packer-io.
 	readonly PACKER_BIN='packer-io'
 else
 	readonly PACKER_BIN='packer'
