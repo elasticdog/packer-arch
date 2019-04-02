@@ -70,6 +70,10 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
 	/usr/bin/sed -i 's/#UseDNS yes/UseDNS no/' /etc/ssh/sshd_config
 	/usr/bin/systemctl enable sshd.service
 
+	# Workaround for https://bugs.archlinux.org/task/58355 which prevents sshd to accept connections after reboot
+	/usr/bin/pacman -S --noconfirm rng-tools
+	/usr/bin/systemctl enable rngd
+
 	# Vagrant-specific configuration
 	/usr/bin/useradd --password ${PASSWORD} --comment 'Vagrant User' --create-home --user-group vagrant
 	echo 'Defaults env_keep += "SSH_AUTH_SOCK"' > /etc/sudoers.d/10_vagrant
