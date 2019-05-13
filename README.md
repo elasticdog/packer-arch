@@ -85,7 +85,7 @@ this repo and go:
 
     $ git clone https://github.com/elasticdog/packer-arch.git
     $ cd packer-arch/
-    $ packer build -only=libvirt arch-template.json
+    $ packer build -only=qemu arch-template.json
 
 Then you can import the generated box into Vagrant:
 
