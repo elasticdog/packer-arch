@@ -2,7 +2,6 @@
     "variables": {
         "iso_url": "https://mirrors.kernel.org/archlinux/iso/{{isotime \"2006.01\"}}.01/archlinux-{{isotime \"2006.01\"}}.01-x86_64.iso",
         "iso_checksum_url": "https://mirrors.kernel.org/archlinux/iso/{{isotime \"2006.01\"}}.01/sha1sums.txt",
-        "iso_checksum_type": "sha1",
         "ssh_timeout": "20m",
         "country": "US",
         "headless": "false"
@@ -14,8 +13,7 @@
             "parallels_tools_mode": "attach",
             "guest_os_type": "linux-2.6",
             "iso_url": "{{ user `iso_url` }}",
-            "iso_checksum_url": "{{ user `iso_checksum_url` }}",
-            "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+            "iso_checksum": "file:{{ user `iso_checksum_url` }}",
             "http_directory": "srv",
             "boot_wait": "5s",
             "boot_command": [
@@ -33,8 +31,7 @@
         {
             "type": "virtualbox-iso",
             "iso_url": "{{ user `iso_url` }}",
-            "iso_checksum_url": "{{ user `iso_checksum_url` }}",
-            "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+            "iso_checksum": "file:{{ user `iso_checksum_url` }}",
             "guest_os_type": "ArchLinux_64",
             "guest_additions_mode": "disable",
             "http_directory": "srv",
@@ -51,13 +48,12 @@
             "ssh_password": "vagrant",
             "ssh_timeout": "{{ user `ssh_timeout` }}",
             "shutdown_command": "sudo systemctl start poweroff.timer",
-            "headless" : "{{ user `headless`}}"
+            "headless": "{{ user `headless`}}"
         },
         {
             "type": "vmware-iso",
             "iso_url": "{{ user `iso_url` }}",
-            "iso_checksum_url": "{{ user `iso_checksum_url` }}",
-            "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+            "iso_checksum": "file:{{ user `iso_checksum_url` }}",
             "http_directory": "srv",
             "boot_wait": "5s",
             "boot_command": [
@@ -71,13 +67,12 @@
             "ssh_password": "vagrant",
             "ssh_timeout": "{{ user `ssh_timeout` }}",
             "shutdown_command": "sudo systemctl start poweroff.timer",
-            "headless" : "{{ user `headless`}}"
+            "headless": "{{ user `headless`}}"
         },
         {
             "type": "qemu",
             "iso_url": "{{ user `iso_url` }}",
-            "iso_checksum_url": "{{ user `iso_checksum_url` }}",
-            "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+            "iso_checksum": "file:{{ user `iso_checksum_url` }}",
             "http_directory": "srv",
             "boot_wait": "5s",
             "boot_command": [
@@ -91,7 +86,7 @@
             "ssh_password": "vagrant",
             "ssh_timeout": "{{ user `ssh_timeout` }}",
             "shutdown_command": "sudo systemctl start poweroff.timer",
-            "headless" : "{{ user `headless`}}"
+            "headless": "{{ user `headless`}}"
         }
     ],
     "provisioners": [
