@@ -102,6 +102,10 @@ code in order to build the final box.
 
     $ wrapacker --country US --dry-run
 
+For debugging purposes, execute:
+
+    $ PACKER_LOG=1 ./wrapacker --country=US --provider=virtualbox --on-error=ask --force
+
 See the `--help` flag for additional details.
 
 Known Issues

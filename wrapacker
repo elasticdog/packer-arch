@@ -18,10 +18,10 @@
 readonly VALID_COUNTRIES=(AT AU BD BE BG BR BY CA CH CL CN CO CZ DE DK EC ES FR GB GR HR HU ID IE IL IN IR IS IT JP KR KZ LT LU LV MK NC NL NO NZ PH PL PT RO RS RU SE SG SK TR TW UA US VN ZA)
 
 if command -v packer-io > /dev/null 2>&1; then
-	# Older arch linux versions called the packer binary packer-io.
-	readonly PACKER_BIN='packer-io'
+  # Older arch linux versions called the packer binary packer-io.
+  readonly PACKER_BIN='packer-io'
 else
-	readonly PACKER_BIN='packer'
+  readonly PACKER_BIN='packer'
 fi
 
 VALID_TIME_UNITS=(ns us ms s m h)
@@ -30,111 +30,126 @@ VALID_TIME_UNITS=(ns us ms s m h)
 
 # print a message to stderr
 warn() {
-	local fmt="$1"
-	shift
-	printf "wrapacker: $fmt\n" "$@" >&2
+  local fmt="$1"
+  shift
+  printf "wrapacker: $fmt\n" "$@" >&2
 }
 
 # print a message to stderr and exit with either
 # the given status or that of the most recent command
 die() {
-	local st="$?"
-	if [[ "$1" != *[^0-9]* ]]; then
-		st="$1"
-		shift
-	fi
-	warn "$@"
-	exit "$st"
+  local st="$?"
+  if [[ "$1" != *[^0-9]* ]]; then
+    st="$1"
+    shift
+  fi
+  warn "$@"
+  exit "$st"
 }
 
 # test the VALID_COUNTRIES array for membership of the given value
 validate_country() {
-	local haystack="VALID_COUNTRIES[@]"
-	local needle=$1
-	local found=1
-	for element in "${!haystack}"; do
-		if [[ $element == "$needle" ]]; then
-			found=0
-			break
-		fi
-	done
-	return $found
+  local haystack="VALID_COUNTRIES[@]"
+  local needle=$1
+  local found=1
+  for element in "${!haystack}"; do
+    if [[ $element == "$needle" ]]; then
+      found=0
+      break
+    fi
+  done
+  return $found
 }
 
 # print this script's usage message to stderr
 usage() {
-	cat <<-EOF >&2
-	usage: wrapacker [-c COUNTRY] [-p PROVIDER] [-t TIMEOUT] [-d] [-h]
-	EOF
+  cat <<-EOF >&2
+  usage: wrapacker [-c COUNTRY] [-p PROVIDER] [-t TIMEOUT] [-o ON-ERROR ACTION] [-f] [-d] [-h]
+EOF
 }
 
 # print the list of valid countries to stderr
 print_valid_countries() {
-	printf '\n*** VALID COUNTRY CODES ***\n\n' >&2
-	for country in "${VALID_COUNTRIES[@]}"; do
-		printf '%-6s\n' "$country"
-	done | column >&2
+  printf '\n*** VALID COUNTRY CODES ***\n\n' >&2
+  for country in "${VALID_COUNTRIES[@]}"; do
+    printf '%-6s\n' "$country"
+  done | column >&2
 }
 
 # print the list of valid providers to stderr
 print_valid_providers() {
-	printf '\n*** VALID PROVIDERS ***\n\n' >&2
-	for provider in {parallels,virtualbox,vmware,libvirt}; do
-		printf '%-6s\n' "$provider"
-	done | column >&2
+  printf '\n*** VALID PROVIDERS ***\n\n' >&2
+  for provider in {parallels,virtualbox,vmware,libvirt}; do
+    printf '%-6s\n' "$provider"
+  done | column >&2
 }
 
 # print the list of valid time units to stderr
 print_valid_time_units() {
-	printf '\n*** VALID TIME UNITS ***\n\n' >&2
-	for units in "${VALID_TIME_UNITS[@]}"; do
-		printf '%-6s\n' "$units"
-	done | column >&2
+  printf '\n*** VALID TIME UNITS ***\n\n' >&2
+  for units in "${VALID_TIME_UNITS[@]}"; do
+    printf '%-6s\n' "$units"
+  done | column >&2
+}
+
+# print the list of valid on-error actions to stderr
+print_valid_on_error_actions() {
+  printf '\n*** VALID ON-ERROR ACTIONS ***\n\n' >&2
+  for action in {cleanup,abort,ask}; do
+    printf '%-6s\n' "$action"
+  done | column >&2
 }
 
 # print this script's help message to stdout
 help() {
-	cat <<-EOF
+  cat <<-EOF
 
-	NAME
-	     wrapacker -- wrap packer to build arch with custom mirror settings
+  NAME
+       wrapacker -- wrap packer to build arch with custom mirror settings
 
-	SYNOPSIS
-	     wrapacker [options...]
+  SYNOPSIS
+       wrapacker [options...]
 
-	DESCRIPTION
+  DESCRIPTION
 
-	     wrapacker will automatically ensure the latest ISO download URL and
-	     will optionally use a mirror from the provided country in order to
-	     build an Arch Linux box using Packer.
+       wrapacker will automatically ensure the latest ISO download URL and
+       will optionally use a mirror from the provided country in order to
+       build an Arch Linux box using Packer.
 
-	OPTIONS
-	     -c, --country=COUNTRY
-	            the country code to download from;
-	            defaults to the kernel.org US mirror
+  OPTIONS
+       -c, --country=COUNTRY
+              the country code to download from;
+              defaults to the kernel.org US mirror
 
-	     -p, --provider=PROVIDER
-	            the packer provider to build with;
-	            defaults to virtualbox
+       -p, --provider=PROVIDER
+              the packer provider to build with;
+              defaults to virtualbox
 
-	     -t, --timeout=TIMEOUT
-	            sets the amount of time packer will wait for trying ssh login;
-	            defaults to 20m
+       -t, --timeout=TIMEOUT
+              sets the amount of time packer will wait for trying ssh login;
+              defaults to 20m
 
-	     -d, --dry-run
-	            do not actually perform the build, just show what would run
+       -o, --on-error=ACTION
+              error handling if the build fails;
+              defaults to cleanup
 
-	     -h, --help
-	            view this help message
+       -f, --force
+              force a build to continue if artifacts exist; deletes existing artifacts
 
-	     -e, --headless
-	            do not run the build in the GUI
-	            only works with --provider=virtualbox
+       -d, --dry-run
+              do not actually perform the build, just show what would run
 
-	AUTHOR
-	     Aaron Bull Schaefer <aaron@elasticdog.com>
+       -h, --help
+              view this help message
 
-	EOF
+       -e, --headless
+              do not run the build in the GUI
+              only works with --provider=virtualbox
+
+  AUTHOR
+       Aaron Bull Schaefer <aaron@elasticdog.com>
+
+EOF
 }
 
 
@@ -142,105 +157,118 @@ help() {
 
 # check for dependencies
 for cmd in {awk,curl,sed,tr}; do
-	command -v $cmd > /dev/null || die "required command \"$cmd\" was not found"
+  command -v $cmd > /dev/null || die "required command \"$cmd\" was not found"
 done
 
 # reset all variables that might be set
 country=''
 provider=''
-dry_run=''
+dry_run=false
 timeout=''
+on_error=''
+force=false
 headless=false
 
 # parse command line options
 while [[ $1 != '' ]]; do
-	case $1 in
-		-c | --country)
-			country=$(echo "$2" | tr '[:lower:]' '[:upper:]')
-			shift
-			;;
-		--country=*)
-			country=$(echo "${1#*=}" | tr '[:lower:]' '[:upper:]')
-			;;
-		-p | --provider)
-			provider=$2
-			shift
-			;;
-		--provider=*)
-			provider=${1#*=}
-			;;
-		-t | --timeout)
-			timeout=$2
-			shift
-			;;
-		--timeout=*)
-			timeout=${1#*=}
-			;;
-		-d| --dry-run)
-			dry_run=true
-			;;
-		-h | --help | -\?)
-			help
-			print_valid_countries
-			print_valid_providers
-			print_valid_time_units
-			exit 0
-			;;
-		-e| --headless)
-			headless=true
-			;;
-		--*)
-			warn "unknown option -- ${1#--}"
-			usage
-			exit 1
-			;;
-		*)
-			warn "unknown option -- ${1#-}"
-			usage
-			exit 1
-			;;
-	esac
-	shift
+  case $1 in
+    -c | --country)
+      country=$(echo "$2" | tr '[:lower:]' '[:upper:]')
+      shift
+      ;;
+    --country=*)
+      country=$(echo "${1#*=}" | tr '[:lower:]' '[:upper:]')
+      ;;
+    -p | --provider)
+      provider=$2
+      shift
+      ;;
+    --provider=*)
+      provider=${1#*=}
+      ;;
+    -t | --timeout)
+      timeout=$2
+      shift
+      ;;
+    --timeout=*)
+      timeout=${1#*=}
+      ;;
+    -o | --on-error)
+      on_error=$2
+      shift
+      ;;
+    --on-error=*)
+      on_error=${1#*=}
+      ;;
+    -f | --force)
+      force=true
+      ;;
+    -d| --dry-run)
+      dry_run=true
+      ;;
+    -h | --help | -\?)
+      help
+      print_valid_countries
+      print_valid_providers
+      print_valid_time_units
+      print_valid_on_error_actions
+      exit 0
+      ;;
+    -e| --headless)
+      headless=true
+      ;;
+    --*)
+      warn "unknown option -- ${1#--}"
+      usage
+      exit 1
+      ;;
+    *)
+      warn "unknown option -- ${1#-}"
+      usage
+      exit 1
+      ;;
+  esac
+  shift
 done
 
 if [[ $provider ]]; then
-	case $(echo "$provider" | tr '[:upper:]' '[:lower:]') in
-		parallels | parallels-iso)
-			PACKER_PROVIDER='parallels-iso'
-			;;
-		virtualbox | virtualbox-iso)
-			PACKER_PROVIDER='virtualbox-iso'
-			;;
-		vmware | vmware-iso)
-			PACKER_PROVIDER='vmware-iso'
-			;;
-		libvirt | qemu)
-			PACKER_PROVIDER='qemu'
-			;;
-		*)
-			warn "unknown provider -- ${provider}"
-			usage
-			print_valid_providers
-			exit 1
-			;;
-	esac
+  case $(echo "$provider" | tr '[:upper:]' '[:lower:]') in
+    parallels | parallels-iso)
+      PACKER_PROVIDER='parallels-iso'
+      ;;
+    virtualbox | virtualbox-iso)
+      PACKER_PROVIDER='virtualbox-iso'
+      ;;
+    vmware | vmware-iso)
+      PACKER_PROVIDER='vmware-iso'
+      ;;
+    libvirt | qemu)
+      PACKER_PROVIDER='qemu'
+      ;;
+    *)
+      warn "unknown provider -- ${provider}"
+      usage
+      print_valid_providers
+      exit 1
+      ;;
+  esac
 else
-	PACKER_PROVIDER='virtualbox-iso'
+  PACKER_PROVIDER='virtualbox-iso'
 fi
 
 if [[ $country ]]; then
-	if validate_country "$country"; then
-		MIRRORLIST="https://www.archlinux.org/mirrorlist/?country=${country}&protocol=http&protocol=https&ip_version=4&use_mirror_status=on"
-		MIRROR=$(curl -s "$MIRRORLIST" | awk '/#Server/{ print $3; exit }' | sed 's|/$repo.*||')
-	else
-		warn 'INVALID COUNTRY SPECIFIED - %s' "$country"
-		usage
-		print_valid_countries
-		exit 1
-	fi
+  if validate_country "$country"; then
+    MIRRORLIST="https://www.archlinux.org/mirrorlist/?country=${country}&protocol=http&protocol=https&ip_version=4&use_mirror_status=on"
+    MIRROR=$(curl -s "$MIRRORLIST" | awk '/#Server/{ print $3; exit }' | sed 's|/$repo.*||')
+  else
+    warn 'INVALID COUNTRY SPECIFIED - %s' "$country"
+    usage
+    print_valid_countries
+    exit 1
+  fi
 else
-	MIRROR='https://mirrors.kernel.org/archlinux'
-	country='US'
+  MIRROR='https://mirrors.kernel.org/archlinux'
+  country='US'
 fi
 
 ISO_CHECKSUM_URL="${MIRROR}/iso/latest/sha1sums.txt"
@@ -248,38 +276,90 @@ ISO_NAME=$(curl -sL "$ISO_CHECKSUM_URL" | awk '/-x86_64.iso/{ print $2 }')
 ISO_URL="${MIRROR}/iso/latest/${ISO_NAME}"
 
 if [[ $timeout ]]; then
-	if [[ "$timeout" =~ ^[0-9]+(ns|us|ms|s|m|h)$ ]]; then
-		SSH_TIMEOUT=$timeout
-	else
-		warn 'INVALID TIME UNITS SPECIFIED or MISSING UNIT - %s' "$timeout"
-		usage
-		print_valid_time_units
-		exit 1
-	fi
+  if [[ "$timeout" =~ ^[0-9]+(ns|us|ms|s|m|h)$ ]]; then
+    SSH_TIMEOUT=$timeout
+  else
+    warn 'INVALID TIME UNITS SPECIFIED or MISSING UNIT - %s' "$timeout"
+    usage
+    print_valid_time_units
+    exit 1
+  fi
 else
-	SSH_TIMEOUT='20m'
+  SSH_TIMEOUT='20m'
 fi
 
-if [[ $dry_run ]]; then
-	cat <<-EOF
-		$PACKER_BIN build \\
-			-only=$PACKER_PROVIDER \\
-			-var "iso_url=$ISO_URL" \\
-			-var "iso_checksum_url=$ISO_CHECKSUM_URL" \\
-			-var "ssh_timeout=$SSH_TIMEOUT" \\
-			-var "country=$country" \\
-			-var "headless=$headless" \\
-			arch-template.json
-	EOF
+if [[ $on_error ]]; then
+  case $(echo "$on_error" | tr '[:upper:]' '[:lower:]') in
+    cleanup)
+      ON_ERROR='cleanup'
+      ;;
+    abort)
+      ON_ERROR='abort'
+      ;;
+    ask)
+      ON_ERROR='ask'
+      ;;
+    *)
+      warn "unknown on-error action -- ${on_error}"
+      usage
+      print_valid_on_error_actions
+      exit 1
+      ;;
+  esac
 else
-	$PACKER_BIN build \
-		-only=$PACKER_PROVIDER \
-		-var "iso_url=$ISO_URL" \
-		-var "iso_checksum_url=$ISO_CHECKSUM_URL" \
-		-var "ssh_timeout=$SSH_TIMEOUT" \
-		-var "country=$country" \
-		-var "headless=$headless" \
-		arch-template.json
+  ON_ERROR='cleanup'
+fi
+
+if [[ $dry_run = true ]]; then
+  if [[ $force = true ]]; then
+cat <<-EOF
+  $PACKER_BIN build \\
+    -only=$PACKER_PROVIDER \\
+    -var "iso_url=$ISO_URL" \\
+    -var "iso_checksum_url=$ISO_CHECKSUM_URL" \\
+    -var "ssh_timeout=$SSH_TIMEOUT" \\
+    -var "country=$country" \\
+    -var "headless=$headless" \\
+    -on-error=$ON_ERROR \\
+    -force \\
+    arch-template.json
+EOF
+  else
+cat <<-EOF
+  $PACKER_BIN build \\
+    -only=$PACKER_PROVIDER \\
+    -var "iso_url=$ISO_URL" \\
+    -var "iso_checksum_url=$ISO_CHECKSUM_URL" \\
+    -var "ssh_timeout=$SSH_TIMEOUT" \\
+    -var "country=$country" \\
+    -var "headless=$headless" \\
+    -on-error=$ON_ERROR \\
+    arch-template.json
+EOF
+  fi
+else
+  if [[ $force = true ]]; then
+    $PACKER_BIN build \
+      -only=$PACKER_PROVIDER \
+      -var "iso_url=$ISO_URL" \
+      -var "iso_checksum_url=$ISO_CHECKSUM_URL" \
+      -var "ssh_timeout=$SSH_TIMEOUT" \
+      -var "country=$country" \
+      -var "headless=$headless" \
+      -on-error=$ON_ERROR \
+      -force \
+      arch-template.json
+  else
+    $PACKER_BIN build \
+      -only=$PACKER_PROVIDER \
+      -var "iso_url=$ISO_URL" \
+      -var "iso_checksum_url=$ISO_CHECKSUM_URL" \
+      -var "ssh_timeout=$SSH_TIMEOUT" \
+      -var "country=$country" \
+      -var "headless=$headless" \
+      -on-error=$ON_ERROR \
+      arch-template.json
+  fi
 fi
 
 exit $?
