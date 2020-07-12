@@ -2,7 +2,6 @@
 
 PASSWORD=$(/usr/bin/openssl passwd -crypt 'vagrant')
 
-echo "==> Enabling SSH"
 # Vagrant-specific configuration
 /usr/bin/useradd --password ${PASSWORD} --comment 'Vagrant User' --create-home --user-group vagrant
 echo 'Defaults env_keep += "SSH_AUTH_SOCK"' > /etc/sudoers.d/10_vagrant
