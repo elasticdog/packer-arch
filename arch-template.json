@@ -22,6 +22,7 @@
                 "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/poweroff.timer<enter><wait5>",
                 "/usr/bin/bash ./enable-ssh.sh<enter>"
             ],
+            "cpus": 1,
             "memory": 768,
             "disk_size": 20480,
             "ssh_username": "vagrant",
@@ -43,6 +44,7 @@
                 "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/poweroff.timer<enter><wait5>",
                 "/usr/bin/bash ./enable-ssh.sh<enter>"
             ],
+            "cpus": 1,
             "memory": 768,
             "disk_size": 20480,
             "hard_drive_interface": "sata",
@@ -64,6 +66,7 @@
                 "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/poweroff.timer<enter><wait5>",
                 "/usr/bin/bash ./enable-ssh.sh<enter>"
             ],
+            "cpus": 1,
             "memory": 768,
             "disk_size": 20480,
             "ssh_username": "vagrant",
@@ -84,6 +87,7 @@
                 "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/poweroff.timer<enter><wait5>",
                 "/usr/bin/bash ./enable-ssh.sh<enter>"
             ],
+            "cpus": 1,
             "memory": 768,
             "disk_size": 20480,
             "ssh_username": "vagrant",
