@@ -75,10 +75,11 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
   /usr/bin/mkinitcpio -p linux
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Setting root pasword.."
   /usr/bin/usermod --password ${PASSWORD} root
-  # https://wiki.archlinux.org/index.php/Network_Configuration#Device_names
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Configuring network.."
+  # Disable systemd Predictable Network Interface Names and revert to traditional interface names
+  # https://wiki.archlinux.org/index.php/Network_configuration#Revert_to_traditional_interface_names
   /usr/bin/ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
-  /usr/bin/ln -s '/usr/lib/systemd/system/dhcpcd@.service' '/etc/systemd/system/multi-user.target.wants/dhcpcd@eth0.service'
+  /usr/bin/systemctl enable dhcpcd@eth0.service
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Configuring sshd.."
   /usr/bin/sed -i 's/#UseDNS yes/UseDNS no/' /etc/ssh/sshd_config
   /usr/bin/systemctl enable sshd.service
