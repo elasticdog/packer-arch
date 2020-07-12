@@ -19,7 +19,7 @@ My goal was to roughly duplicate the attributes from a
 * 512 MB memory
 * Only a single /root partition (ext4)
 * No swap
-* Includes the `base` and `base-devel` package groups
+* Includes the `base` meta package and `base-devel` group
 * OpenSSH is also installed and enabled on boot
 
 The installation script follows the
