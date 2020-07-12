@@ -21,9 +21,6 @@ TARGET_DIR='/mnt'
 COUNTRY=${COUNTRY:-US}
 MIRRORLIST="https://www.archlinux.org/mirrorlist/?country=${COUNTRY}&protocol=http&protocol=https&ip_version=4&use_mirror_status=on"
 
-echo ">>>> install-base.sh: Setting pacman ${COUNTRY} mirrors.."
-curl -s "$MIRRORLIST" |  sed 's/^#Server/Server/' > /etc/pacman.d/mirrorlist
-
 echo ">>>> install-base.sh: Clearing partition table on ${DISK}.."
 /usr/bin/sgdisk --zap ${DISK}
 
@@ -42,6 +39,9 @@ echo ">>>> install-base.sh: Creating /root filesystem (ext4).."
 
 echo ">>>> install-base.sh: Mounting ${ROOT_PARTITION} to ${TARGET_DIR}.."
 /usr/bin/mount -o noatime,errors=remount-ro ${ROOT_PARTITION} ${TARGET_DIR}
+
+echo ">>>> install-base.sh: Setting pacman ${COUNTRY} mirrors.."
+curl -s "$MIRRORLIST" |  sed 's/^#Server/Server/' > /etc/pacman.d/mirrorlist
 
 echo ">>>> install-base.sh: Bootstrapping the base installation.."
 /usr/bin/pacstrap ${TARGET_DIR} base base-devel linux
