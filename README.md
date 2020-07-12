@@ -131,7 +131,7 @@ guest additions work just fine.
 
 ### Vagrant Provisioners
 
-The box purposefully does not include Puppet or Chef for automatic Vagrant
+The box purposefully does not include Puppet, Chef or Ansible for automatic Vagrant
 provisioning. My intention was to duplicate a DigitalOcean VPS and
 furthermore use the VM for testing [Ansible](http://www.ansible.com/)
 playbooks for configuration management.
