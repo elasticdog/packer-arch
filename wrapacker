@@ -64,7 +64,7 @@ validate_country() {
 # print this script's usage message to stderr
 usage() {
   cat <<-EOF >&2
-  usage: wrapacker [-c COUNTRY] [-p PROVIDER] [-t TIMEOUT] [-o ON-ERROR ACTION] [-f] [-d] [-h]
+  usage: wrapacker [-c COUNTRY] [-p PROVIDER] [-t TIMEOUT] [-w] [-o ON-ERROR ACTION] [-f] [-d] [-h]
 EOF
 }
 
@@ -129,6 +129,9 @@ help() {
               sets the amount of time packer will wait for trying ssh login;
               defaults to 20m
 
+       -w, --skip-write-zeros
+              don't inflate the disk to improve virtual disk compaction
+
        -o, --on-error=ACTION
               error handling if the build fails;
               defaults to cleanup
@@ -165,6 +168,7 @@ country=''
 provider=''
 dry_run=false
 timeout=''
+skip_write_zeros=false
 on_error=''
 force=false
 headless=false
@@ -192,6 +196,9 @@ while [[ $1 != '' ]]; do
       ;;
     --timeout=*)
       timeout=${1#*=}
+      ;;
+    -w | --skip-write-zeros)
+      skip_write_zeros=true
       ;;
     -o | --on-error)
       on_error=$2
@@ -288,6 +295,12 @@ else
   SSH_TIMEOUT='20m'
 fi
 
+if [[ $skip_write_zeros = true ]]; then
+  WRITE_ZEROS="false"
+else
+  WRITE_ZEROS="true"
+fi
+
 if [[ $on_error ]]; then
   case $(echo "$on_error" | tr '[:upper:]' '[:lower:]') in
     cleanup)
@@ -320,6 +333,7 @@ cat <<-EOF
     -var "ssh_timeout=$SSH_TIMEOUT" \\
     -var "country=$country" \\
     -var "headless=$headless" \\
+    -var "write_zeros=$WRITE_ZEROS" \\
     -on-error=$ON_ERROR \\
     -force \\
     arch-template.json
@@ -333,6 +347,7 @@ cat <<-EOF
     -var "ssh_timeout=$SSH_TIMEOUT" \\
     -var "country=$country" \\
     -var "headless=$headless" \\
+    -var "write_zeros=$WRITE_ZEROS" \\
     -on-error=$ON_ERROR \\
     arch-template.json
 EOF
@@ -346,6 +361,7 @@ else
       -var "ssh_timeout=$SSH_TIMEOUT" \
       -var "country=$country" \
       -var "headless=$headless" \
+      -var "write_zeros=$WRITE_ZEROS" \
       -on-error=$ON_ERROR \
       -force \
       arch-template.json
@@ -357,6 +373,7 @@ else
       -var "ssh_timeout=$SSH_TIMEOUT" \
       -var "country=$country" \
       -var "headless=$headless" \
+      -var "write_zeros=$WRITE_ZEROS" \
       -on-error=$ON_ERROR \
       arch-template.json
   fi

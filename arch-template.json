@@ -4,6 +4,7 @@
         "iso_checksum_url": "https://mirrors.kernel.org/archlinux/iso/{{isotime \"2006.01\"}}.01/sha1sums.txt",
         "ssh_timeout": "20m",
         "country": "US",
+        "write_zeros": "true",
         "headless": "false"
     },
     "builders": [
@@ -124,7 +125,7 @@
         },
         {
             "type": "shell",
-            "execute_command": "{{ .Vars }} sudo -E -S bash '{{ .Path }}'",
+            "execute_command": "{{ .Vars }} WRITE_ZEROS={{ user `write_zeros` }} sudo -E -S bash '{{ .Path }}'",
             "script": "scripts/cleanup.sh"
         }
     ],
