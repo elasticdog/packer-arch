@@ -19,7 +19,7 @@ CONFIG_SCRIPT='/usr/local/bin/arch-config.sh'
 ROOT_PARTITION="${DISK}1"
 TARGET_DIR='/mnt'
 COUNTRY=${COUNTRY:-US}
-MIRRORLIST="https://www.archlinux.org/mirrorlist/?country=${COUNTRY}&protocol=http&protocol=https&ip_version=4&use_mirror_status=on"
+MIRRORLIST="https://archlinux.org/mirrorlist/?country=${COUNTRY}&protocol=http&protocol=https&ip_version=4&use_mirror_status=on"
 
 echo ">>>> install-base.sh: Clearing partition table on ${DISK}.."
 /usr/bin/sgdisk --zap ${DISK}
