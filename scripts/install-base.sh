@@ -117,5 +117,9 @@ echo ">>>> install-base.sh: Adding workaround for shutdown race condition.."
 echo ">>>> install-base.sh: Completing installation.."
 /usr/bin/sleep 3
 /usr/bin/umount ${TARGET_DIR}
+# Turning network interfaces down to make sure SSH session was dropped on host.
+# More info at: https://www.packer.io/docs/provisioners/shell.html, section - Handling reboots
+echo '==> Turning down network interfaces and rebooting'
+for i in $(/usr/bin/netstat -i | /usr/bin/tail +3 | /usr/bin/awk '{print $1}'); do /usr/bin/ip link set ${i} down; done
 /usr/bin/systemctl reboot
 echo ">>>> install-base.sh: Installation complete!"
