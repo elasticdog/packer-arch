@@ -279,7 +279,7 @@ else
 fi
 
 ISO_CHECKSUM_URL="${MIRROR}/iso/latest/sha1sums.txt"
-ISO_NAME=$(curl -sL "$ISO_CHECKSUM_URL" | awk '/-x86_64.iso/{ print $2 }')
+ISO_NAME=$(curl -sL "$ISO_CHECKSUM_URL" | awk '/-x86_64.iso/{ print $2 }' | tail -n 1)
 ISO_URL="${MIRROR}/iso/latest/${ISO_NAME}"
 
 if [[ $timeout ]]; then
