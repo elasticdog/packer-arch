@@ -24,7 +24,7 @@
                 "/usr/bin/bash ./enable-ssh.sh<enter>"
             ],
             "cpus": 1,
-            "memory": 768,
+            "memory": 1024,
             "disk_size": 20480,
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
@@ -46,7 +46,7 @@
                 "/usr/bin/bash ./enable-ssh.sh<enter>"
             ],
             "cpus": 1,
-            "memory": 768,
+            "memory": 1024,
             "disk_size": 20480,
             "hard_drive_interface": "sata",
             "ssh_username": "vagrant",
@@ -68,7 +68,7 @@
                 "/usr/bin/bash ./enable-ssh.sh<enter>"
             ],
             "cpus": 1,
-            "memory": 768,
+            "memory": 1024,
             "disk_size": 20480,
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
@@ -89,7 +89,7 @@
                 "/usr/bin/bash ./enable-ssh.sh<enter>"
             ],
             "cpus": 1,
-            "memory": 768,
+            "memory": 1024,
             "disk_size": 20480,
             "ssh_username": "vagrant",
             "ssh_password": "vagrant",
