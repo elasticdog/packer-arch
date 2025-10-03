@@ -1,7 +1,7 @@
 {
     "variables": {
-        "iso_url": "https://mirrors.kernel.org/archlinux/iso/{{isotime \"2006.01\"}}.01/archlinux-{{isotime \"2006.01\"}}.01-x86_64.iso",
-        "iso_checksum_url": "https://mirrors.kernel.org/archlinux/iso/{{isotime \"2006.01\"}}.01/sha1sums.txt",
+        "iso_url": "https://mirrors.kernel.org/archlinux/iso/latest/archlinux-x86_64.iso",
+        "iso_checksum_url": "https://mirrors.kernel.org/archlinux/iso/latest/sha256sums.txt",
         "ssh_timeout": "20m",
         "country": "US",
         "write_zeros": "true",
