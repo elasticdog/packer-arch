@@ -12,44 +12,44 @@ fi
 FQDN='vagrant-arch.vagrantup.com'
 KEYMAP='us'
 LANGUAGE='en_US.UTF-8'
-PASSWORD=$(/usr/bin/openssl passwd -crypt 'vagrant')
+PASSWORD="$(/usr/bin/openssl passwd -6 'vagrant')"
 TIMEZONE='UTC'
 
 CONFIG_SCRIPT='/usr/local/bin/arch-config.sh'
 ROOT_PARTITION="${DISK}1"
 TARGET_DIR='/mnt'
-COUNTRY=${COUNTRY:-US}
+COUNTRY="${COUNTRY:-US}"
 MIRRORLIST="https://archlinux.org/mirrorlist/?country=${COUNTRY}&protocol=http&protocol=https&ip_version=4&use_mirror_status=on"
 
 echo ">>>> install-base.sh: Clearing partition table on ${DISK}.."
-/usr/bin/sgdisk --zap ${DISK}
+/usr/bin/sgdisk --zap "${DISK}"
 
 echo ">>>> install-base.sh: Destroying magic strings and signatures on ${DISK}.."
-/usr/bin/dd if=/dev/zero of=${DISK} bs=512 count=2048
-/usr/bin/wipefs --all ${DISK}
+/usr/bin/dd if=/dev/zero "of=${DISK}" bs=512 count=2048
+/usr/bin/wipefs --all "${DISK}"
 
 echo ">>>> install-base.sh: Creating /root partition on ${DISK}.."
-/usr/bin/sgdisk --new=1:0:0 ${DISK}
+/usr/bin/sgdisk --new=1:0:0 "${DISK}"
 
 echo ">>>> install-base.sh: Setting ${DISK} bootable.."
-/usr/bin/sgdisk ${DISK} --attributes=1:set:2
+/usr/bin/sgdisk "${DISK}" --attributes=1:set:2
 
 echo ">>>> install-base.sh: Creating /root filesystem (ext4).."
-/usr/bin/mkfs.ext4 -O ^64bit -F -m 0 -q -L root ${ROOT_PARTITION}
+/usr/bin/mkfs.ext4 -O ^64bit -F -m 0 -q -L root "${ROOT_PARTITION}"
 
 echo ">>>> install-base.sh: Mounting ${ROOT_PARTITION} to ${TARGET_DIR}.."
-/usr/bin/mount -o noatime,errors=remount-ro ${ROOT_PARTITION} ${TARGET_DIR}
+/usr/bin/mount -o noatime,errors=remount-ro "${ROOT_PARTITION}" "${TARGET_DIR}"
 
 echo ">>>> install-base.sh: Setting pacman ${COUNTRY} mirrors.."
 curl -s "$MIRRORLIST" |  sed 's/^#Server/Server/' > /etc/pacman.d/mirrorlist
 
 echo ">>>> install-base.sh: Bootstrapping the base installation.."
-/usr/bin/pacstrap ${TARGET_DIR} base base-devel linux
+/usr/bin/pacstrap "${TARGET_DIR}" base base-devel linux
 
 # Need to install netctl as well: https://github.com/archlinux/arch-boxes/issues/70
 # Can be removed when Vagrant's Arch plugin will use systemd-networkd: https://github.com/hashicorp/vagrant/pull/11400
 echo ">>>> install-base.sh: Installing basic packages.."
-/usr/bin/arch-chroot ${TARGET_DIR} pacman -S --noconfirm gptfdisk openssh syslinux dhcpcd netctl
+/usr/bin/arch-chroot "${TARGET_DIR}" pacman -S --noconfirm gptfdisk openssh syslinux dhcpcd netctl
 
 echo ">>>> install-base.sh: Configuring syslinux.."
 /usr/bin/arch-chroot ${TARGET_DIR} syslinux-install_update -i -a -m
@@ -57,16 +57,16 @@ echo ">>>> install-base.sh: Configuring syslinux.."
 /usr/bin/sed -i 's/TIMEOUT 50/TIMEOUT 10/' "${TARGET_DIR}/boot/syslinux/syslinux.cfg"
 
 echo ">>>> install-base.sh: Generating the filesystem table.."
-/usr/bin/genfstab -p ${TARGET_DIR} >> "${TARGET_DIR}/etc/fstab"
+/usr/bin/genfstab -p "${TARGET_DIR}" >> "${TARGET_DIR}/etc/fstab"
 
 echo ">>>> install-base.sh: Generating the system configuration script.."
 /usr/bin/install --mode=0755 /dev/null "${TARGET_DIR}${CONFIG_SCRIPT}"
 
-CONFIG_SCRIPT_SHORT=`basename "$CONFIG_SCRIPT"`
+CONFIG_SCRIPT_SHORT="$(basename "$CONFIG_SCRIPT")"
 cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Configuring hostname, timezone, and keymap.."
   echo '${FQDN}' > /etc/hostname
-  /usr/bin/ln -s /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
+  /usr/bin/ln -s '/usr/share/zoneinfo/${TIMEZONE}' /etc/localtime
   echo 'KEYMAP=${KEYMAP}' > /etc/vconsole.conf
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Configuring locale.."
   /usr/bin/sed -i 's/#${LANGUAGE}/${LANGUAGE}/' /etc/locale.gen
@@ -74,7 +74,7 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Creating initramfs.."
   /usr/bin/mkinitcpio -p linux
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Setting root pasword.."
-  /usr/bin/usermod --password ${PASSWORD} root
+  /usr/bin/usermod --password '${PASSWORD}' root
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Configuring network.."
   # Disable systemd Predictable Network Interface Names and revert to traditional interface names
   # https://wiki.archlinux.org/index.php/Network_configuration#Revert_to_traditional_interface_names
@@ -91,7 +91,7 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
 
   # Vagrant-specific configuration
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Creating vagrant user.."
-  /usr/bin/useradd --password ${PASSWORD} --comment 'Vagrant User' --create-home --user-group vagrant
+  /usr/bin/useradd --password '${PASSWORD}' --comment 'Vagrant User' --create-home --user-group vagrant
   echo ">>>> ${CONFIG_SCRIPT_SHORT}: Configuring sudo.."
   echo 'Defaults env_keep += "SSH_AUTH_SOCK"' > /etc/sudoers.d/10_vagrant
   echo 'vagrant ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers.d/10_vagrant
@@ -107,7 +107,7 @@ cat <<-EOF > "${TARGET_DIR}${CONFIG_SCRIPT}"
 EOF
 
 echo ">>>> install-base.sh: Entering chroot and configuring system.."
-/usr/bin/arch-chroot ${TARGET_DIR} ${CONFIG_SCRIPT}
+/usr/bin/arch-chroot "${TARGET_DIR}" "${CONFIG_SCRIPT}"
 rm "${TARGET_DIR}${CONFIG_SCRIPT}"
 
 # http://comments.gmane.org/gmane.linux.arch.general/48739
@@ -116,10 +116,10 @@ echo ">>>> install-base.sh: Adding workaround for shutdown race condition.."
 
 echo ">>>> install-base.sh: Completing installation.."
 /usr/bin/sleep 3
-/usr/bin/umount ${TARGET_DIR}
+/usr/bin/umount "${TARGET_DIR}"
 # Turning network interfaces down to make sure SSH session was dropped on host.
 # More info at: https://www.packer.io/docs/provisioners/shell.html#handling-reboots
 echo '==> Turning down network interfaces and rebooting'
-for i in $(/usr/bin/ip -o link show | /usr/bin/awk -F': ' '{print $2}'); do /usr/bin/ip link set ${i} down; done
+for i in $(/usr/bin/ip -o link show | /usr/bin/awk -F': ' '{print $2}'); do /usr/bin/ip link set "${i}" down; done
 /usr/bin/systemctl reboot
 echo ">>>> install-base.sh: Installation complete!"
